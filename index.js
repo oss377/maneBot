@@ -89,7 +89,7 @@ This bot helps you register and join our exclusive group. Please select an optio
     paymentDeclined: '⚠️ Your payment was declined. Please upload the correct payment screenshot after you pay to this number: 1000592847366',
     finishPaymentPrompt: 'You still need to upload your payment screenshot. Please upload it now to complete your registration.',
     waitForApproval: '⏳ Your payment has been submitted and is waiting for admin approval. Please wait.',
-    alreadyRegistered: 'You are already registered. You can view your data in "My Profile".',
+    alreadyRegistered: 'You are already registered. You can now register another person if you wish.',
     registerAnother: 'Register Another Person',
     askName_other: 'Enter the full name of the person you want to register:',
     askEmail_other: 'Enter the email address of the person you want to register:',
@@ -115,6 +115,27 @@ This bot helps you register and join our exclusive group. Please select an optio
     continueRegistrationPrompt: '👋 Welcome back! It looks like you didn\'t finish your registration. Click the button below to continue where you left off.',
     continueRegistrationButton: '➡️ Continue Registration',
     welcomeBackFinishPayment: 'Welcome back! It looks like you\'ve completed your registration details. Please upload your payment to finalize.',
+    continueAtStep: (step) => `You left off at the *${step}* step. Let's continue.`,
+    stepName: 'Full Name',
+    stepEmail: 'Email Address',
+    stepLocation: 'Location',
+    stepPhone: 'Phone Number',
+    stepPayment: 'Payment Screenshot',
+    stepNameOther: 'Friend\'s Full Name',
+    stepEmailOther: 'Friend\'s Email Address',
+    stepLocationOther: 'Friend\'s Location',
+    stepPhoneOther: 'Friend\'s Phone Number',
+    stepPaymentOther: 'Friend\'s Payment Screenshot',
+    registrationSteps: `*How to Register* 📝
+
+Here are the simple steps to complete your registration:
+
+1️⃣ *Enter Your Details*: We'll ask for your full name, email, location, and phone number.
+2️⃣ *Submit Payment*: You'll be asked to upload a screenshot of your payment.
+3️⃣ *Admin Approval*: Our admin will review your payment.
+4️⃣ *Join the Group*: Once approved, you can join the exclusive group!
+
+Click the "Register / መዝግብ" button below to start.`
   },
   am: {
     welcome: `*እንኳን ደህና መጡ!* ✨
@@ -177,7 +198,7 @@ This bot helps you register and join our exclusive group. Please select an optio
     paymentDeclined: '⚠️ ክፍያዎ ተቀባይነት አላገኘም። እባክዎ ወደዚህ ቁጥር ከከፈሉ በኋላ ትክክለኛውን የክፍያ ማስረጃ ይጫኑ: 1000592847366',
     finishPaymentPrompt: 'ምዝገባዎን ለማጠናቀቅ አሁንም የክፍያ ቅጽበታዊ ገጽ እይታዎን መስቀል ያስፈልግዎታል። እባክዎ አሁን ይስቀሉት።',
     waitForApproval: '⏳ ክፍያዎ ገብቷል እና የአስተዳዳሪ ይሁንታ በመጠባበቅ ላይ ነው። እባክዎ ይጠብቁ።',
-    alreadyRegistered: 'እርስዎ አስቀድመው ተመዝግበዋል። የእርስዎን መረጃ "My Profile" ውስጥ ማየት ይችላሉ።',
+    alreadyRegistered: 'እርስዎ አስቀድመው ተመዝግበዋል። አሁን ከፈለጉ ሌላ ሰው መመዝገብ ይችላሉ።',
     registerAnother: 'ሌላ ሰው ይመዝግቡ',
     askName_other: 'ሊመዘግቡት የሚፈልጉትን ሰው ሙሉ ስም ያስገቡ፡',
     askEmail_other: 'ሊመዘግቡት የሚፈልጉትን ሰው የኢሜል አድራሻ ያስገቡ፡',
@@ -203,6 +224,27 @@ This bot helps you register and join our exclusive group. Please select an optio
     continueRegistrationPrompt: '👋 እንኳን ደህና መጡ! ምዝገባዎን ያላጠናቀቁ ይመስላል። ካቆሙበት ለመቀጠል ከታች ያለውን ቁልፍ ይጫኑ።',
     continueRegistrationButton: '➡️ ምዝገባ ይቀጥሉ',
     welcomeBackFinishPayment: 'እንኳን ደህና መጡ! የምዝገባ ዝርዝሮችዎን ያጠናቀቁ ይመስላል። እባክዎ ምዝገባዎን ለማጠናቀቅ ክፍያዎን ይጫኑ።',
+    continueAtStep: (step) => `*${step}* ደረጃ ላይ አቁመዋል። እንቀጥል።`,
+    stepName: 'ሙሉ ስም',
+    stepEmail: 'ኢሜይል አድራሻ',
+    stepLocation: 'ቦታ',
+    stepPhone: 'ስልክ ቁጥር',
+    stepPayment: 'የክፍያ ማስረጃ',
+    stepNameOther: 'የጓደኛ ሙሉ ስም',
+    stepEmailOther: 'የጓደኛ ኢሜይል አድራሻ',
+    stepLocationOther: 'የጓደኛ ቦታ',
+    stepPhoneOther: 'የጓደኛ ስልክ ቁጥር',
+    stepPaymentOther: 'የጓደኛ የክፍያ ማስረጃ',
+    registrationSteps: `*እንዴት መመዝገብ እንደሚችሉ* 📝
+
+ምዝገባዎን ለማጠናቀቅ ቀላል ደረጃዎች እነሆ፡-
+
+1️⃣ *ዝርዝሮችዎን ያስገቡ*፡ ሙሉ ስምዎን፣ ኢሜልዎን፣ አካባቢዎን እና ስልክ ቁጥርዎን እንጠይቃለን።
+2️⃣ *ክፍያ ያስገቡ*፡ የክፍያዎን ቅጽበታዊ ገጽ እይታ እንዲሰቅሉ ይጠየቃሉ።
+3️⃣ *የአስተዳዳሪ ማረጋገጫ*፡ አስተዳዳሪያችን ክፍያዎን ይገመግመዋል።
+4️⃣ *ቡድኑን ይቀላቀሉ*፡ አንዴ ከጸደቀ፣ ልዩ ቡድኑን መቀላቀል ይችላሉ!
+
+ለመጀመር ከታች ያለውን "Register / መዝግብ" የሚለውን ቁልፍ ይጫኑ።`
   }
 ,
   om: {
@@ -238,8 +280,8 @@ Boottiin kun garee addaa keenyatti akka galmooftanii fi makamtan isin gargaara. 
     askPayment: 'Mee amma ragaa kaffaltii keessanii suuraa kaaftanii ergaa:',
     accountNumber: 'Mee lakkofsa herregaa kana irratti kafalaa: 1000592847366',
     processingPayment: 'Kaffaltiin keessan hojjetamaa jira. Mirkanneessa adminii eegaa...',
-    paymentSuccess: '✅ Kaffaltiin keessan milkaa\'inaan mirkanaa\'eera!',
-    invalidApprove: 'Fayyadamaa sirrii hin taane yookiin kaffaltii duraan mirkanaa\'e.',
+    paymentSuccess: '✅ Kaffaltiin keessan milkaainaan mirkanaaeera!.',
+    invalidApprove: 'Fayyadamaa sirrii hin taane yookiin kaffaltii duraan mirkanaae.',
     joinGroup: 'Gareetti Makami',
     joinGroupSuccess: 'Gareetti makamuuf, linkii armaan gadii cuqaasaa:',
     joinGroupNotApproved: 'Galmeen keessan henüz hin xumuramne yookiin hin mirkanoofne. Mee kaffaltii xumuraa yookiin mirkaneeffama eegaa.',
@@ -254,19 +296,19 @@ Boottiin kun garee addaa keenyatti akka galmooftanii fi makamtan isin gargaara. 
     askNewName: 'Mee maqaa keessan haaraa guutuu galchaa:',
     askNewEmail: 'Mee teessoo email keessan haaraa galchaa:',
     askNewPhone: 'Mee lakkofsa bilbilaa keessan haaraa galchaa:',
-    updateSuccess: '✅ Profaayiliin keessan milkaa\'inaan haaromfameera!',
+    updateSuccess: '✅ Profaayiliin keessan milkaainaan haaromfameera!',
     invalidName: 'Maqaa sirrii hin taane. Mee maqaa abbaa keessanii dabalatee maqaa guutuu galchaa (fkn. Tolasaa Fayisaa).',
     invalidEmail: 'Email sirrii hin taane. Mee teessoo email sirrii galchaa (fkn. user@example.com).',
     invalidPhone: 'Lakkofsa bilbilaa sirrii hin taane. Mee lakkofsa 10 kan 09n jalqabu galchaa (fkn. 0911223344).',
-    otherProfileTitle: '👤 *Profaayilii Hiriyyaa Galmaa\'e*',
+    otherProfileTitle: '👤 *Profaayilii Hiriyyaa Galmaa',
     statusLabel: 'Haala',
-    statusApproved: '✅ Mirkanaa\'eera',
+    statusApproved: '✅ Mirkanaa eera',
     statusPending: '⏳ Mirkanneessa Eeggachaa Jira',
     statusAwaitingPayment: '⚠️ Kaffaltii Eeggachaa Jira',
-    paymentDeclined: '⚠️ Kaffaltiin keessan fudhatama hin arganne. Mee lakkofsa kanatti erga kaffaltan booda ragaa kaffaltii sirrii ta\'e olkaa\'aa: 1000592847366',
-    finishPaymentPrompt: 'Ammallee suuraa kaffaltii keessanii olkaa\'uu qabdu. Mee galmee keessan xumuruuf amma olkaa\'aa.',
-    waitForApproval: '⏳ Kaffaltiin keessan galmaa\'ee mirkaneessa adminii eeggachaa jira. Mee eegaa.',
-    alreadyRegistered: 'Duraan galmooftaniirtu. Odeeffannoo keessan "Profaayilii Koo" keessatti ilaaluu dandeessu.',
+    paymentDeclined: '⚠️ Kaffaltiin keessan fudhatama hin arganne. Mee lakkofsa kanatti erga kaffaltan booda ragaa kaffaltii sirrii taeolkaa: 1000592847366',
+    finishPaymentPrompt: 'Ammallee suuraa kaffaltii keessanii olkaauu qabdu. Mee galmee keessan xumuruuf amma olkaaaa.',
+    waitForApproval: '⏳ Kaffaltiin keessan galmaa ee mirkaneessa adminii eeggachaa jira. Mee eegaa.',
+    alreadyRegistered: 'Duraan galmooftaniirtu. Amma yoo barbaaddan nama biraa galmeessuu dandeessu.',
     registerAnother: 'Nama Biraa Galmeessi',
     askName_other: 'Maqaa nama galmeessuu barbaaddanii guutuu galchaa:',
     askEmail_other: 'Teessoo email nama galmeessuu barbaaddanii galchaa:',
@@ -274,24 +316,45 @@ Boottiin kun garee addaa keenyatti akka galmooftanii fi makamtan isin gargaara. 
     askPhone_other: 'Lakkofsa bilbilaa nama galmeessuu barbaaddanii kan 10-dijitii fi 09n jalqabu galchaa (fkn. 0911223344):',
     preRetreatFeeling: 'Leenjii Dura Miira',
     postRetreatFeeling: 'Leenjii Booda Miira',
-    askPreRetreatFeeling: 'Leenjii dura maaltu isinitti dhaga\'ama? Mee yaada keessan nuuf qoodaa.',
-    askPostRetreatFeeling: 'Leenjii booda maaltu isinitti dhaga\'ama? Mee yaada keessan nuuf qoodaa.',
-    feelingSaved: '✅ Waan nuuf qooddaniif galatoomaa! Yaanni keessan galmaa\'eera.',
+    askPreRetreatFeeling: 'Leenjii dura maaltu isinitti dhagaama? Mee yaada keessan nuuf qoodaa.',
+    askPostRetreatFeeling: 'Leenjii booda maaltu isinitti dhagaama? Mee yaada keessan nuuf qoodaa.',
+    feelingSaved: '✅ Waan nuuf qooddaniif galatoomaa! Yaanni keessan galmaaeera.',
     dataDeletedNotification: 'Odeeffannoon keessan sirna keenya keessaa adminiin yeroo hundumaaf haqameera.',
-    canRegisterOthers: 'Amma, maatii, hiriyoota, fi namoota biroo affeeruu barbaaddan galmeessuuf, irra deebi\'iin "Register / Galmeessi" kan jedhu cuqaasuu dandeessu.',
-    // askToSharePhone: 'Baga nagaan dhuftan! Jalqabuuf, hiriyaa keessaniin duraan galmaa\'uu keessan mirkaneessuuf mee lakkofsa bilbilaa keessan nuuf qoodaa. Tarkaanfii kana bira darbuus ni dandeessu.',
+    canRegisterOthers: 'Amma, maatii, hiriyoota, fi namoota biroo affeeruu barbaaddan galmeessuuf, irra deebiin "Register / Galmeessi" kan jedhu cuqaasuu dandeessu.',
+    // askToSharePhone: 'Baga nagaan dhuftan! Jalqabuuf, hiriyaa keessaniin duraan galmaa'uu keessan mirkaneessuuf mee lakkofsa bilbilaa keessan nuuf qoodaa. Tarkaanfii kana bira darbuus ni dandeessu.',
     // phoneNotFound: 'Lakkofsi bilbilaa keessan tarree galmee duraa keenya keessatti hin argamne. Galmee haaraa haa jalqabnu.',
     welcomeBackPreRegistered: 'Baga nagaan dhuftan! Galmee keessan kan hiriyaa keessan irraa arganneerra. Akaawuntiin keessan amma hojiirra ooleera.',
     friendUploadedPayment: (name) => `🙏 Galatoomaa! Hiriyyaan keessan, ${name}, kaffaltii isaanii milkaa'inaan erganiiru.`,
     friendApproved: (name) => `🎉 Oduu gammachiisaa! Galmeen hiriyyaa keessanii, ${name}, mirkanaa'eera. Amma garee keenyatti makamuu danda'u.`,
     friendDeclined: (name) => `⚠️ Hubachiisa: Kaffaltiin hiriyyaa keessanii, ${name}, fudhatama hin arganne. Mee suuraa kaffaltii sirrii ta'e akka ergan isaan waliin mari'adhaa.`,
-    remindPreRetreatFeeling: '🔔 *Yaadachiisa!*\n\nYaada keessan dhaga\'uu ni feena. Leenjii dura maaltu isinitti dhaga\'ama? Mee yaada keessan nuuf qoodaa.',
-    remindPostRetreatFeeling: '🔔 *Yaadachiisa!*\n\nYeroo gaarii akka dabarsitan abdii qabna. Leenjii booda maaltu isinitti dhaga\'ama? Mee yaada keessan nuuf qoodaa.',
+    remindPreRetreatFeeling: '🔔 *Yaadachiisa!*\n\nYaada keessan dhagauu ni feena. Leenjii dura maaltu isinitti dhagaama? Mee yaada keessan nuuf qoodaa.',
+    remindPostRetreatFeeling: '🔔 *Yaadachiisa!*\n\nYeroo gaarii akka dabarsitan abdii qabna. Leenjii booda maaltu isinitti dhagaama? Mee yaada keessan nuuf qoodaa.',
     contactUsButton: '📞 Nu Qunnamaa',
     contactUs: `*Akkaataa Ittiin Nu Qunnamtan!*\n\nKaraalee armaan gadiitiin nu qunnamuu dandeessu:\n\n*Bilbila:* \`+251911223344\`\n*Email:* contact@example.com\n*Chaanaalii Telegramii:* @YourChannelLink\n*Facebook:* Fuula Facebook Keenyaa`,
     continueRegistrationPrompt: '👋 Baga nagaan deebitan! Akkaataa galmee keessanii hin xumurre fakkaata. Bakka dhaabdan irraa itti fufuuf, mee mallattoo armaan gadii tuqaa.',
     continueRegistrationButton: '➡️ Galmee Itti Fufi',
-    welcomeBackFinishPayment: 'Baga nagaan deebitan! Odeeffannoo galmee keessanii xumurtaniirtu fakkaata. Mee kaffaltii keessan olkaa\'aa.',
+    welcomeBackFinishPayment: 'Baga nagaan deebitan! Odeeffannoo galmee keessanii xumurtaniirtu fakkaata. Mee kaffaltii keessan olkaa.',
+    continueAtStep: (step) => `Sadarkaa *${step}* irratti dhaabbatte. Itti fufnaa.`,
+    stepName: 'Maqaa Guutuu',
+    stepEmail: 'Teessoo Email',
+    stepLocation: 'Iddoo',
+    stepPhone: 'Lakkofsa Bilbilaa',
+    stepPayment: 'Ragaa Kaffaltii',
+    stepNameOther: 'Maqaa Guutuu Hiriyyaa',
+    stepEmailOther: 'Teessoo Email Hiriyyaa',
+    stepLocationOther: 'Iddoo Hiriyyaa',
+    stepPhoneOther: 'Lakkofsa Bilbilaa Hiriyyaa',
+    stepPaymentOther: 'Ragaa Kaffaltii Hiriyyaa',
+    registrationSteps: `*Akkaataa Itti Galmooftan* 📝
+
+Galmee keessan xumuruuf tarkaanfiilee salphaa ta'an kunooti:
+
+1️⃣ *Odeeffannoo Keessan Galchaa*: Maqaa guutuu, email, iddoo, fi lakkoofsa bilbilaa keessan isin gaafanna.
+2️⃣ *Kaffaltii Galchaa*: Suuraa ragaa kaffaltii keessanii akka olkaaftan ni gaafatamtu.
+3️⃣ *Mirkaneessa Adminii*: Adminiin keenya kaffaltii keessan ni ilaala.
+4️⃣ *Gareetti Makami*: Erga mirkanaa'ee booda, garee addaa keenyatti makamuu dandeessu!
+
+Jalqabuuf, mee tuqa "Register / Galmeessi" jedhu cuqaasaa.`
   }
 };
 
@@ -327,7 +390,7 @@ const generateMainMenuKeyboard = (lang, user) => {
   ];
 
   // If user is in the middle of a registration step, add a "Continue Registration" button
-  if (user && user.step) {
+  if (user && user.step && (user.step.includes('_other') || ['name', 'email', 'location', 'phone', 'payment'].includes(user.step))) {
     keyboard.unshift([{ text: langText[lang].continueRegistrationButton }]);
   }
 
@@ -353,13 +416,13 @@ function setUserTimeout(chatId, lang) {
       console.log(`User ${chatId} has been idle. Sending a restart prompt.`);
       const startKeyboard = {
         reply_markup: {
-          keyboard: [[{ text: '/start' }]],
+          keyboard: [[{ text: 'Back' }]],
           resize_keyboard: true,
           one_time_keyboard: true
         }
       };
       // A generic message that fits all languages
-      bot.sendMessage(chatId, 'Are you stuck? You can restart by clicking the button below.', startKeyboard);
+      bot.sendMessage(chatId, 'Are you stuck? You can go back to the main menu by clicking the button below.', startKeyboard);
     }
     delete userTimeouts[chatId];
   }, 30000); // 30 seconds
@@ -505,6 +568,157 @@ bot.onText(/\/start(?: (.+))?/, async (msg, match) => { // Handles /start and /s
   return bot.sendMessage(chatId, langText[userLang].welcome, { ...generateMainMenuKeyboard(userLang, user), parse_mode: 'Markdown' });
 });
 
+// --- HELPER FUNCTION ---
+async function displayCurrentStep(bot, chatId, user, lang, stepOverride = null) {
+  const step = user.step;
+  if (!step) {
+    // This can be called from a callback or a message, so we avoid answering a query that might not exist.
+    // Simply show the main menu if there's no step.
+    return bot.sendMessage(chatId, langText[lang].welcome, { ...generateMainMenuKeyboard(lang, user), parse_mode: 'Markdown' });
+  }
+
+  let stepFriendlyName = '';
+  let promptMessage = '';
+  const displayStep = stepOverride || step; // Use override if provided
+
+  // Dynamically get the friendly name to avoid large switch cases
+  const stepKey = `step${displayStep.charAt(0).toUpperCase() + displayStep.slice(1).replace('_o', 'O')}`;
+  stepFriendlyName = langText[lang][stepKey] || displayStep;
+
+  switch (displayStep) {
+    case 'name':
+      promptMessage = langText[lang].askName;
+      break;
+    case 'email':
+      promptMessage = langText[lang].askEmail;
+      break;
+    case 'location':
+      promptMessage = langText[lang].askLocation;
+      break;
+    case 'phone':
+      promptMessage = langText[lang].askPhone;
+      break;
+    case 'payment':
+      await bot.sendMessage(chatId, langText[lang].accountNumber);
+      return bot.sendMessage(chatId, langText[lang].askPayment, generateMainMenuKeyboard(lang, user));
+    case 'name_other':
+      promptMessage = langText[lang].askName_other;
+      break;
+    case 'email_other':
+      promptMessage = langText[lang].askEmail_other;
+      break;
+    case 'location_other':
+      promptMessage = langText[lang].askLocation_other;
+      break;
+    case 'phone_other':
+      promptMessage = langText[lang].askPhone_other;
+      break;
+    case 'payment_other':
+      promptMessage = langText[lang].askPayment;
+      bot.sendMessage(chatId, langText[lang].accountNumber);
+      break;
+  }
+  setUserTimeout(chatId, lang);
+  return bot.sendMessage(chatId, promptMessage, { ...generateMainMenuKeyboard(lang, user), parse_mode: 'Markdown' });
+}
+
+// --- HELPER FUNCTIONS FOR ADMIN ACTIONS ---
+async function approveUser(userId, adminChatId) {
+  try {
+    const targetUser = await User.findOne({ chatId: userId });
+    if (targetUser && targetUser.payment && !targetUser.approved) {
+      targetUser.approved = true;
+      targetUser.step = null;
+
+      await targetUser.save();
+      const userLang = targetUser.lang || 'en'; // Get target user's language
+      await bot.sendMessage(userId, langText[userLang].paymentSuccess, generateMainMenuKeyboard(userLang, targetUser));
+      await bot.sendMessage(adminChatId, `✅ Payment for ${targetUser.name} (${userId}) has been approved.`); // Confirm to admin
+
+      // Notify inviter if applicable
+      if (targetUser.invited_by_chatId) {
+        const inviter = await User.findOne({ chatId: targetUser.invited_by_chatId });
+        if (inviter) {
+          const inviterLang = inviter.lang || 'en';
+          await bot.sendMessage(inviter.chatId, langText[inviterLang].friendApproved(targetUser.name));
+        }
+      }
+    } else {
+      bot.sendMessage(adminChatId, langText.en.invalidApprove);
+    }
+  } catch (error) {
+    console.error('Error in /approve:', error);
+    bot.sendMessage(adminChatId, 'An error occurred while approving.');
+  }
+}
+
+async function declineUser(userId, adminChatId) {
+  try {
+    const targetUser = await User.findOne({ chatId: userId });
+    if (targetUser && targetUser.payment && !targetUser.approved) {
+      targetUser.payment = null; // Clear payment to allow re-upload
+      targetUser.step = 'payment'; // Set user back to payment step
+      await targetUser.save();
+
+      const userLang = targetUser.lang || 'en';
+      await bot.sendMessage(userId, langText[userLang].paymentDeclined);
+      await bot.sendMessage(userId, langText[userLang].accountNumber);
+      await bot.sendMessage(userId, langText[userLang].askPayment);
+      await bot.sendMessage(adminChatId, `Payment for ${targetUser.name} (${userId}) declined. User has been asked to re-upload.`); // Confirm to admin
+    } else {
+      bot.sendMessage(adminChatId, 'Invalid user or no pending payment to decline.');
+    }
+  } catch (error) {
+    console.error('Error in /decline:', error);
+    bot.sendMessage(adminChatId, 'An error occurred while declining.');
+  }
+}
+
+async function approveOtherUser(userId, regIndex, adminChatId) {
+  const targetUser = await User.findOne({ chatId: userId });
+  const otherReg = targetUser?.other_registrations?.[regIndex];
+
+  if (otherReg && otherReg.payment && !otherReg.approved) {
+    otherReg.approved = true;
+    await targetUser.save();
+
+    const userLang = targetUser.lang || 'en';
+    // Notify the registrar about the approval
+    await bot.sendMessage(userId, langText[userLang].friendApproved(otherReg.name));
+    bot.sendMessage(adminChatId, `✅ Payment for "${otherReg.name}" (registered by ${targetUser.name}) has been approved.`);
+  } else {
+    bot.sendMessage(adminChatId, 'Invalid registration or payment already approved.');
+  }
+}
+
+async function declineOtherUser(userId, regIndex, adminChatId) {
+  // This function is called but not defined in the original code.
+  // We'll add a basic implementation based on the approveOtherUser logic.
+  // You may need to expand this based on your exact requirements.
+  const targetUser = await User.findOne({ chatId: userId });
+  const otherReg = targetUser?.other_registrations?.[regIndex];
+
+  if (otherReg && otherReg.payment && !otherReg.approved) {
+    otherReg.payment = null; // Clear the incorrect payment so they can re-upload
+    await targetUser.save();
+    const userLang = targetUser.lang || 'en';
+
+    // Set user to the correct step to re-upload for the other person
+    targetUser.step = 'payment_other';
+    targetUser.current_other_reg_index = regIndex;
+    await targetUser.save();
+
+    // Notify the registrar about the decline
+    await bot.sendMessage(userId, langText[userLang].friendDeclined(otherReg.name));
+    await bot.sendMessage(userId, `⚠️ The payment for *${otherReg.name}* was declined. Please upload a correct payment screenshot on their behalf.`, { parse_mode: 'Markdown' });
+    await bot.sendMessage(userId, langText[lang].accountNumber);
+    await bot.sendMessage(userId, `Please upload the payment screenshot for ${otherReg.name}:`);
+    bot.sendMessage(adminChatId, `Payment for "${otherReg.name}" declined. User ${userId} has been asked to re-upload.`);
+  } else {
+    bot.sendMessage(adminChatId, 'Invalid registration or no pending payment to decline.');
+  }
+}
+
 // Handle callback queries for editing profile
 bot.on('callback_query', async (callbackQuery) => {
   const msg = callbackQuery.message;
@@ -512,6 +726,43 @@ bot.on('callback_query', async (callbackQuery) => {
   const action = callbackQuery.data;
   const user = await User.findOne({ chatId });
   const lang = user.lang || 'en'; // lang is guaranteed to be set here due to /start logic
+
+  // --- ADMIN CALLBACKS ---
+  if (chatId.toString() === ADMIN_CHAT_ID) {
+    const parts = action.split(' ');
+    const command = parts[0];
+    const targetChatId = parts[1];
+    const regIndex = parts[2] ? parseInt(parts[2], 10) : null;
+
+    if (command === '/approve' && targetChatId) {
+      await approveUser(targetChatId, chatId);
+      bot.answerCallbackQuery(callbackQuery.id, { text: '✅ User approved!' });
+      return bot.editMessageCaption(`${msg.caption}\n\n---\n✅ Approved by admin.`, { chat_id: chatId, message_id: msg.message_id });
+    }
+    if (command === '/decline' && targetChatId) {
+      await declineUser(targetChatId, chatId);
+      bot.answerCallbackQuery(callbackQuery.id, { text: '❌ User declined.' });
+      return bot.editMessageCaption(`${msg.caption}\n\n---\n❌ Declined by admin.`, { chat_id: chatId, message_id: msg.message_id });
+    }
+    if (command === '/approve_other' && targetChatId && regIndex !== null) {
+      await approveOtherUser(targetChatId, regIndex, chatId);
+      bot.answerCallbackQuery(callbackQuery.id, { text: '✅ User approved!' });
+      return bot.editMessageCaption(`${msg.caption}\n\n---\n✅ Approved by admin.`, { chat_id: chatId, message_id: msg.message_id });
+    }
+    if (command === '/decline_other' && targetChatId && regIndex !== null) {
+      await declineOtherUser(targetChatId, regIndex, chatId);
+      bot.answerCallbackQuery(callbackQuery.id, { text: '❌ User declined.' });
+      return bot.editMessageCaption(`${msg.caption}\n\n---\n❌ Declined by admin.`, { chat_id: chatId, message_id: msg.message_id });
+    }
+  }
+  // --- END ADMIN CALLBACKS ---
+
+  // If the callback is from an admin but wasn't an approval/decline button,
+  // it might be a different admin action (like from /incomplete).
+  // We let those pass through to the logic below, but we stop regular user logic from running for admins.
+  if (chatId.toString() === ADMIN_CHAT_ID && !action.startsWith('remind_')) {
+     return bot.answerCallbackQuery(callbackQuery.id);
+  }
 
   if (action === 'edit_name') {
     user.step = 'edit_name';
@@ -531,6 +782,7 @@ bot.on('callback_query', async (callbackQuery) => {
     bot.sendMessage(chatId, langText[lang].askNewLocation);
   } else if (action === 'finish_payments') {
     // Check for user's own pending payment status
+    bot.answerCallbackQuery(callbackQuery.id);
     if (user.name && !user.approved) { // User has registered but is not yet approved
       if (user.payment) {
         // Payment is uploaded, waiting for approval
@@ -556,60 +808,25 @@ bot.on('callback_query', async (callbackQuery) => {
     }
     // If no pending payments are found
     return bot.sendMessage(chatId, '✅ All payments are up to date!');
-  }
-  // Handle "Continue Registration" button click
-  if (action === 'continue_registration') { // This block was already correct
+  } else if (action === 'continue_registration') {
+    // Handle "Continue Registration" button click
     const step = user.step;
-    if (!step) {
+       if (!step) {
       return bot.answerCallbackQuery(callbackQuery.id, { text: 'You have no pending registration steps.' });
     }
 
-    let promptMessage = '';
-    switch (step) {
-      case 'name':
-        promptMessage = langText[lang].askName;
-        break;
-      case 'email':
-        promptMessage = langText[lang].askEmail;
-        break;
-      case 'location':
-        promptMessage = langText[lang].askLocation;
-        break;
-      case 'phone':
-        promptMessage = langText[lang].askPhone;
-        break;
-      case 'payment':
-        // --- UPDATED: Ask for payment but also display the main menu ---
-        setUserTimeout(chatId, lang);
-        await bot.sendMessage(chatId, langText[lang].accountNumber);
-        return bot.sendMessage(chatId, langText[lang].askPayment, generateMainMenuKeyboard(lang, user));
-        break;
-      case 'name_other':
-        promptMessage = langText[lang].askName_other;
-        break;
-      case 'email_other':
-        promptMessage = langText[lang].askEmail_other;
-        break;
-      case 'location_other':
-        promptMessage = langText[lang].askLocation_other;
-        break;
-      case 'phone_other':
-        promptMessage = langText[lang].askPhone_other;
-        break;
-      case 'payment_other':
-        promptMessage = langText[lang].askPayment;
-        bot.sendMessage(chatId, langText[lang].accountNumber);
-        break;
-    }
-    setUserTimeout(chatId, lang);
-    return bot.sendMessage(chatId, promptMessage, { reply_markup: { remove_keyboard: true } });
-  }
-  
+    // The `user.step` from the database is the most reliable source of truth for where the user left off.
+    const stepToDisplay = user.step;
+    console.log(`Continue registration (callback): Displaying step '${stepToDisplay}'`);
 
-  bot.answerCallbackQuery(callbackQuery.id);
-  // Handle the new reminder callback
-  if (action.startsWith('remind_user:')) {
-    const parts = action.split(':');
+    // Now, we use `stepToDisplay` to show the user where they are,
+    // but we use the original `step` from the database to get the correct prompt.
+    // This ensures we ask for the correct piece of information.
+    await displayCurrentStep(bot, chatId, user, lang, stepToDisplay);
+    return; // The displayCurrentStep function handles sending the message.
+  } else if (action.startsWith('remind_user:')) {
+    // Handle the new reminder callback
+    const parts = action.split(':'); // eslint-disable-line
     const targetChatId = parts[1];
     const regIndex = parseInt(parts[2], 10);
 
@@ -676,9 +893,8 @@ bot.on('callback_query', async (callbackQuery) => {
       console.error('Error sending reminder:', error);
       bot.answerCallbackQuery(callbackQuery.id, { text: '❌ Error sending reminder.' });
     }
-  }
-  // Handle feeling reminder callbacks
-  if (action.startsWith('remind_feeling:')) {
+  } else if (action.startsWith('remind_feeling:')) {
+    // Handle feeling reminder callbacks
     const [, type, targetChatId] = action.split(':');
 
     try {
@@ -699,23 +915,61 @@ bot.on('callback_query', async (callbackQuery) => {
       }
       bot.answerCallbackQuery(callbackQuery.id, { text: `✅ ${type} feeling reminder sent!` });
     } catch (error) {
-      console.error('Error sending feeling reminder:', error);
-      bot.answerCallbackQuery(callbackQuery.id, { text: '❌ Error sending reminder.' });
+      // --- IMPROVED ERROR HANDLING ---
+      if (error.code === 'ETELEGRAM' && error.response && error.response.statusCode === 403) {
+        console.log(`Could not send feeling reminder to ${targetChatId}: Bot was blocked by the user.`);
+        bot.answerCallbackQuery(callbackQuery.id, { text: 'User has blocked the bot.' });
+      } else {
+        console.error('Error sending feeling reminder:', error);
+        bot.answerCallbackQuery(callbackQuery.id, { text: '❌ Error sending reminder.' });
+      }
     }
+  } else {
+    // If no other action was matched, answer the query to prevent a timeout
+    bot.answerCallbackQuery(callbackQuery.id);
   }
+
   await user.save();
 });
+
 
 // Handle messages
 bot.on('message', async (msg) => {
   const chatId = msg.chat.id;
   const text = msg.text ? msg.text.trim() : undefined; // can be undefined, trim whitespace
   
-  // --- FIX: Ignore all commands in the general message handler ---
+  // --- FIX: Check if it's an admin command BEFORE the general slash command check ---
+  // First check if this is an admin trying to use an admin command
   if (text && text.startsWith('/')) {
-    return;
+    // Extract the command
+    const commandMatch = text.match(/^\/(\w+)/);
+    if (commandMatch) {
+      const command = commandMatch[1];
+      const adminCommands = ['approve', 'decline', 'approve_other', 'decline_other', 
+                            'deleteuser', 'broadcast', 'exportusers', 'pendingpayments', 
+                            'stats', 'incomplete', 'feelings', 'remindfeelings'];
+      
+      // If it's an admin command, check if user is admin
+      if (adminCommands.includes(command)) {
+        // Check if ADMIN_CHAT_ID is still the placeholder
+        if (ADMIN_CHAT_ID === 'YOUR_ADMIN_CHAT_ID') {
+          return bot.sendMessage(chatId, '⚠️ Admin commands are not configured. Please set the `ADMIN_CHAT_ID` environment variable in your .env file to your Telegram Chat ID.');
+        }
+        
+        // Check if user is authorized
+        if (chatId.toString() !== ADMIN_CHAT_ID) {
+          return bot.sendMessage(chatId, '🚫 You are not authorized to use this command.');
+        }
+        
+        // Let the admin command logic continue - don't return early
+        // The command will be processed in the code below
+      } else {
+        // It's a regular user command (like /start), skip the general handler
+        return;
+      }
+    }
   }
-
+  
   // If a message is received, the user is not idle, so clear any pending timeout.
   if (userTimeouts[chatId]) {
     clearTimeout(userTimeouts[chatId]);
@@ -731,7 +985,9 @@ bot.on('message', async (msg) => {
     else return bot.sendMessage(chatId, 'Please select a valid language / እባክዎን ቋንቋ ይምረጡ: / Mee afaan sirrii filadhu:');
     user.step = null; // Clear the step after language selection
     await user.save();
-    return bot.sendMessage(chatId, langText[user.lang].welcome, { ...generateMainMenuKeyboard(user.lang, user), parse_mode: 'Markdown' });
+    // --- NEW: Show registration steps to new users ---
+    await bot.sendMessage(chatId, langText[user.lang].registrationSteps, { parse_mode: 'Markdown' });
+    return bot.sendMessage(chatId, langText[user.lang].welcome, { ...generateMainMenuKeyboard(user.lang, user), parse_mode: 'Markdown' }); // Then show the main menu
   }
 
   // If user is not found and they didn't type /start, prompt them to start.
@@ -770,498 +1026,443 @@ bot.on('message', async (msg) => {
       }
 
       // Notify admin for self-registration
-      const caption = `User: ${user.name} (${chatId})\nEmail: ${user.email}\nPhone: ${user.phone}\nLocation: ${user.location}\n\nApprove: /approve ${chatId}\nDecline: /decline ${chatId}`;
-      bot.sendPhoto(ADMIN_CHAT_ID, fileId, { caption });
+      const caption = `User: ${user.name} (${chatId})\nEmail: ${user.email}\nPhone: ${user.phone}\nLocation: ${user.location}`;
+      const adminOptions = {
+        caption,
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: '✅ Approve', callback_data: `/approve ${chatId}` }, { text: '❌ Decline', callback_data: `/decline ${chatId}` }]
+          ]
+        }
+      };
+      bot.sendPhoto(ADMIN_CHAT_ID, fileId, adminOptions);
 
     } else if (user.step === 'payment_other') {
       // Use the index we saved when the user clicked "Finish Payments"
       // Fallback to the last one if the index isn't set (for direct registration flow)
-      const regIndex = user.current_other_reg_index ?? user.other_registrations.length - 1;
+      const regIndex = user.current_other_reg_index ?? (user.other_registrations.length - 1);
+      if (regIndex === null || regIndex === undefined || !user.other_registrations[regIndex]) {
+        console.error(`Error: Invalid regIndex for payment_other. User: ${chatId}, Index: ${regIndex}`);
+        return bot.sendMessage(chatId, 'An error occurred. Could not find the registration to apply payment to. Please contact support.');
+      }
       const newReg = user.other_registrations[regIndex];
       newReg.payment = msg.photo[msg.photo.length - 1].file_id;
       newReg.payment_pending_since = null; // Clear pending timestamp
       newReg.approved = false; // Set approval status
       user.step = null;
+      user.current_other_reg_index = null; // Clear the index after use
       await user.save();
       bot.sendMessage(chatId, langText[lang].processingPayment, generateMainMenuKeyboard(lang, user));
 
       // Notify admin about the new registration
       const caption = `New Registration by ${user.name} (${chatId}):\n\n` +
-                      `New User Name: ${newReg.name}\n` +
-                      `New User Email: ${newReg.email}\n` +
-                      `New User Phone: ${newReg.phone}\n` +
-                      `New User Location: ${newReg.location}\n\n` +
-                      `Approve: /approve_other ${chatId} ${regIndex}\nDecline: /decline_other ${chatId} ${regIndex}`;
-      bot.sendPhoto(ADMIN_CHAT_ID, newReg.payment, { caption });
+                      `New User Name: ${newReg.name}\n`+
+                      `New User Email: ${newReg.email}\n`+
+                      `New User Phone: ${newReg.phone}\n`+
+                      `New User Location: ${newReg.location}`;
+      const adminOptions = {
+        caption,
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: '✅ Approve', callback_data: `/approve_other ${chatId} ${regIndex}` }, { text: '❌ Decline', callback_data: `/decline_other ${chatId} ${regIndex}` }]
+          ]
+        }
+      };
+      bot.sendPhoto(ADMIN_CHAT_ID, newReg.payment, adminOptions);
     }
     return; // Exit after handling the photo
   }
 
-  // Commands
-  if (text.startsWith('/')) {
-    // --- Admin Commands ---
-    // Check if ADMIN_CHAT_ID is still the placeholder
-    if (ADMIN_CHAT_ID === 'YOUR_ADMIN_CHAT_ID') {
-      return bot.sendMessage(chatId, '⚠️ Admin commands are not configured. Please set the `ADMIN_CHAT_ID` environment variable in your .env file to your Telegram Chat ID.');
-    }
-    // All admin commands should be guarded by this check
-    if (chatId.toString() !== ADMIN_CHAT_ID) {
-      return bot.sendMessage(chatId, '🚫 You are not authorized to use this command.');
-    }
-    if (text.startsWith('/approve ')) { // Re-added ADMIN_CHAT_ID check implicitly by the outer guard
-      const parts = text.split(' ');
-      const userId = parts[1];
-      try {
-        const targetUser = await User.findOne({ chatId: userId });
-        if (targetUser && targetUser.payment && !targetUser.approved) {
-          targetUser.approved = true;
-          targetUser.step = null;
+  // --- Admin Commands Logic ---
+  // This section should handle admin commands after the photo handling check
+  if (text && text.startsWith('/')) {
+    // Check if it's an admin command
+    const commandMatch = text.match(/^\/(\w+)/);
+    if (commandMatch) {
+      const command = commandMatch[1];
+      const adminCommands = ['approve', 'decline', 'approve_other', 'decline_other', 
+                            'deleteuser', 'broadcast', 'exportusers', 'pendingpayments', 
+                            'stats', 'incomplete', 'feelings', 'remindfeelings'];
+      
+      if (adminCommands.includes(command)) {
+        // The authorization check was already done at the beginning
+        // Now execute the specific admin command
+        
+        if (text.startsWith('/approve ')) {
+          const parts = text.split(' ');
+          const userId = parts[1];
+          await approveUser(userId, chatId);
+          return;
+        }
 
-          await targetUser.save();
-          const userLang = targetUser.lang || 'en'; // Get target user's language
-          await bot.sendMessage(userId, langText[userLang].paymentSuccess, generateMainMenuKeyboard(userLang, targetUser));
-          await bot.sendMessage(chatId, `✅ Payment for ${targetUser.name} (${userId}) has been approved.`); // Confirm to admin
+        if (text.startsWith('/approve_other ')) {
+          const parts = text.split(' ');
+          const userId = parts[1];
+          const regIndex = parseInt(parts[2], 10);
+          await approveOtherUser(userId, regIndex, chatId);
+          return;
+        } // End of /approve_other
 
-          // Notify inviter if applicable
-          if (targetUser.invited_by_chatId) {
-            const inviter = await User.findOne({ chatId: targetUser.invited_by_chatId });
-            if (inviter) {
-              const inviterLang = inviter.lang || 'en';
-              await bot.sendMessage(inviter.chatId, langText[inviterLang].friendApproved(targetUser.name));
+        if (text.startsWith('/decline_other ')) {
+          const parts = text.split(' ');
+          const userId = parts[1];
+          const regIndex = parseInt(parts[2], 10);
+          await declineOtherUser(userId, regIndex, chatId);
+          return;
+        } // End of /decline_other
+
+        if (text.startsWith('/deleteuser ')) {
+          const parts = text.split(' ');
+          if (parts.length < 2) {
+            return bot.sendMessage(chatId, 'Please provide a User ID.\nUsage: `/deleteuser <userId>`', { parse_mode: 'Markdown' });
+          }
+          const userIdToDelete = parts[1];
+
+          try {
+            const userToDelete = await User.findOne({ chatId: userIdToDelete });
+
+            if (!userToDelete) {
+              return bot.sendMessage(chatId, `❌ User with ID \`${userIdToDelete}\` not found.`, { parse_mode: 'Markdown' });
             }
-          }
-        } else {
-          bot.sendMessage(chatId, langText.en.invalidApprove);
-        }
-      } catch (error) {
-        console.error('Error in /approve:', error);
-        bot.sendMessage(chatId, 'An error occurred while approving.');
-      }
-      return;
-    }
 
-    if (text.startsWith('/decline ')) { // Re-added ADMIN_CHAT_ID check implicitly by the outer guard
-      const parts = text.split(' ');
-      const userId = parts[1];
-      try {
-        const targetUser = await User.findOne({ chatId: userId });
-        if (targetUser && targetUser.payment && !targetUser.approved) {
-          targetUser.payment = null; // Clear payment to allow re-upload
-          targetUser.step = 'payment'; // Set user back to payment step
-          await targetUser.save();
-
-          const userLang = targetUser.lang || 'en';
-          await bot.sendMessage(userId, langText[userLang].paymentDeclined);
-          await bot.sendMessage(userId, langText[userLang].accountNumber);
-          await bot.sendMessage(userId, langText[userLang].askPayment);
-          await bot.sendMessage(chatId, `Payment for ${targetUser.name} (${userId}) declined. User has been asked to re-upload.`); // Confirm to admin
-        } else {
-          bot.sendMessage(chatId, 'Invalid user or no pending payment to decline.');
-        }
-      } catch (error) {
-        console.error('Error in /decline:', error);
-        bot.sendMessage(chatId, 'An error occurred while declining.');
-      }
-      return;
-    } // End of /decline
-
-    if (text.startsWith('/approve_other ')) { // No need for ADMIN_CHAT_ID check here anymore due to outer guard
-      const parts = text.split(' ');
-      const userId = parts[1];
-      const regIndex = parseInt(parts[2], 10);
-      const targetUser = await User.findOne({ chatId: userId });
-      const otherReg = targetUser?.other_registrations?.[regIndex];
-
-      if (otherReg && otherReg.payment && !otherReg.approved) {
-        otherReg.approved = true;
-        await targetUser.save();
-
-        const userLang = targetUser.lang || 'en';
-        // Notify the registrar about the approval
-        await bot.sendMessage(userId, langText[userLang].friendApproved(otherReg.name));
-        bot.sendMessage(chatId, `✅ Payment for "${otherReg.name}" (registered by ${targetUser.name}) has been approved.`);
-      } else {
-        bot.sendMessage(chatId, 'Invalid registration or payment already approved.');
-      }
-    } // End of /approve_other
-
-    if (text.startsWith('/decline_other ')) { // No need for ADMIN_CHAT_ID check here anymore due to outer guard
-      const parts = text.split(' ');
-      const userId = parts[1];
-      const regIndex = parseInt(parts[2], 10);
-      const targetUser = await User.findOne({ chatId: userId });
-      const otherReg = targetUser?.other_registrations?.[regIndex];
-
-      if (otherReg && otherReg.payment && !otherReg.approved) {
-        otherReg.payment = null; // Clear the incorrect payment so they can re-upload
-        await targetUser.save();
-        const userLang = targetUser.lang || 'en';
-
-        // Set user to the correct step to re-upload for the other person
-        targetUser.step = 'payment_other';
-        targetUser.current_other_reg_index = regIndex;
-        await targetUser.save();
-
-        // Notify the registrar about the decline
-        await bot.sendMessage(userId, langText[userLang].friendDeclined(otherReg.name));
-        await bot.sendMessage(userId, `⚠️ The payment for *${otherReg.name}* was declined. Please upload a correct payment screenshot on their behalf.`, { parse_mode: 'Markdown' });
-        await bot.sendMessage(userId, langText[userLang].accountNumber);
-        await bot.sendMessage(userId, `Please upload the payment screenshot for ${otherReg.name}:`);
-        bot.sendMessage(chatId, `Payment for "${otherReg.name}" declined. User ${userId} has been asked to re-upload.`);
-      } // End of if otherReg
-    } // End of /decline_other
-
-    if (text.startsWith('/deleteuser ')) { // No need for ADMIN_CHAT_ID check here anymore due to outer guard
-      const parts = text.split(' ');
-      if (parts.length < 2) {
-        return bot.sendMessage(chatId, 'Please provide a User ID.\nUsage: `/deleteuser <userId>`', { parse_mode: 'Markdown' });
-      }
-      const userIdToDelete = parts[1];
-
-      try {
-        const userToDelete = await User.findOne({ chatId: userIdToDelete });
-
-        if (!userToDelete) {
-          return bot.sendMessage(chatId, `❌ User with ID \`${userIdToDelete}\` not found.`, { parse_mode: 'Markdown' });
-        }
-
-        // Notify the user their data is being deleted.
-        try {
-          const userLang = userToDelete.lang || 'en';
-          await bot.sendMessage(userIdToDelete, langText[userLang].dataDeletedNotification);
-        } catch (error) {
-          console.log(`Could not notify user ${userIdToDelete} about data deletion. They may have blocked the bot.`);
-        }
-
-        // Delete the user's document from the database
-        await User.deleteOne({ chatId: userIdToDelete });
-
-        return bot.sendMessage(chatId, `✅ Successfully deleted all data for user \`${userIdToDelete}\`.`, { parse_mode: 'Markdown' });
-      } catch (error) {
-        console.error('Error deleting user:', error);
-        return bot.sendMessage(chatId, '❌ An error occurred while trying to delete the user.', { parse_mode: 'Markdown' });
-      }
-    } // End of /deleteuser
-
-    if (text.startsWith('/broadcast ')) { // No need for ADMIN_CHAT_ID check here anymore due to outer guard
-      const messageToSend = text.substring('/broadcast '.length);
-      if (!messageToSend) {
-        return bot.sendMessage(chatId, 'Please provide a message to broadcast.\nUsage: `/broadcast <your message>`', { parse_mode: 'Markdown' });
-      }
-
-      // Find all users who have completed at least the name step
-      const allUsers = await User.find({ name: { $ne: null } });
-
-      if (allUsers.length === 0) {
-        return bot.sendMessage(chatId, 'No registered users found to broadcast to.');
-      }
-
-      bot.sendMessage(chatId, `🚀 Starting broadcast to ${allUsers.length} users...`);
-
-      let successCount = 0;
-      let errorCount = 0;
-
-      for (const user of allUsers) {
-        try {
-          await bot.sendMessage(user.chatId, messageToSend);
-          successCount++;
-        } catch (error) {
-          console.error(`Failed to send message to user ${user.chatId}:`, error.message);
-          errorCount++;
-        }
-      }
-
-      return bot.sendMessage(chatId, `Broadcast finished.\n\n✅ Successfully sent to: ${successCount} users.\n❌ Failed to send to: ${errorCount} users.`);
-    } // End of /broadcast
-
-    if (text === '/exportusers') { // No need for ADMIN_CHAT_ID check here anymore due to outer guard
-      bot.sendMessage(chatId, '🔄 Generating user export... Please wait.');
-
-      try {
-        // Find all users who have at least started registration
-        const allUsers = await User.find({ name: { $ne: null } });
-
-        if (allUsers.length === 0) {
-          return bot.sendMessage(chatId, 'No registered users found to export.');
-        }
-
-        const csvHeaders = [
-          'UserID', 'Name', 'Email', 'Phone', 'Location', 'Status', 'RegisteredBy_ID', 'RegisteredBy_Name', 'FeelingBefore', 'FeelingAfter'
-        ];
-
-        const escapeCsv = (field) => {
-          if (field === null || field === undefined) return '';
-          const str = String(field);
-          // If the string contains a comma, double quote, or newline, wrap it in double quotes
-          if (str.includes(',') || str.includes('"') || str.includes('\n')) {
-            // Also, double up any existing double quotes
-            return `"${str.replace(/"/g, '""')}"`;
-          }
-          return str;
-        };
-
-        const getStatus = (reg) => {
-          if (reg.approved) return 'Approved';
-          if (reg.payment) return 'Pending Approval';
-          if (reg.phone) return 'Pending Payment';
-          return 'Incomplete';
-        };
-
-        const userRows = allUsers.flatMap(user => {
-          // Row for the primary user
-          const primaryUserRow = [
-            user.chatId, user.name, user.email, user.phone, user.location, getStatus(user), 'self', 'self', user.feeling_before, user.feeling_after
-          ].map(escapeCsv).join(',');
-
-          // Rows for other people they registered
-          const otherUserRows = (user.other_registrations || []).map(otherReg => {
-            return [
-              otherReg.phone || 'N/A', otherReg.name, otherReg.email, otherReg.phone, otherReg.location, getStatus(otherReg), user.chatId, user.name
-            ].map(escapeCsv).join(',');
-          });
-
-          return [primaryUserRow, ...otherUserRows];
-        });
-
-        const csvContent = [csvHeaders.join(','), ...userRows].join('\n');
-        const fileBuffer = Buffer.from(csvContent, 'utf8');
-
-        bot.sendDocument(chatId, fileBuffer, {}, {
-          filename: `user_export_${new Date().toISOString().split('T')[0]}.csv`,
-          contentType: 'text/csv'
-        });
-      } catch (error) {
-        console.error('Failed to export users:', error);
-        bot.sendMessage(chatId, '❌ An error occurred while generating the user export.');
-      }
-    } // End of /exportusers
-
-    if (text === '/pendingpayments') { // No need for ADMIN_CHAT_ID check here anymore due to outer guard
-      bot.sendMessage(chatId, '🔍 Searching for pending payments...');
-
-      try {
-        // Find users with pending payments (for themselves or for others)
-        const usersWithPending = await User.find({
-          $or: [
-            { payment: { $ne: null }, approved: false },
-            { 'other_registrations.payment': { $ne: null }, 'other_registrations.approved': false }
-          ]
-        });
-
-        if (usersWithPending.length === 0) {
-          return bot.sendMessage(chatId, '✅ No pending payments found.');
-        }
-
-        let pendingList = [];
-        usersWithPending.forEach(user => {
-          // Check the main user's payment
-          if (user.payment && !user.approved) {
-            pendingList.push(`*User:* ${user.name} (ID: \`${user.chatId}\`)\n  - To approve, send: \`/approve ${user.chatId}\``);
-          }
-
-          // Check payments for others registered by this user
-          user.other_registrations.forEach((reg, index) => {
-            if (reg.payment && !reg.approved) {
-              pendingList.push(`*For:* ${reg.name} (Registered by ${user.name})\n  - To approve, send: \`/approve_other ${user.chatId} ${index}\``);
+            // Notify the user their data is being deleted.
+            try {
+              const userLang = userToDelete.lang || 'en';
+              await bot.sendMessage(userIdToDelete, langText[userLang].dataDeletedNotification);
+            } catch (error) {
+              console.log(`Could not notify user ${userIdToDelete} about data deletion. They may have blocked the bot.`);
             }
-          });
-        });
 
-        const message = `*⏳ Pending Payment Approvals*\n\n${pendingList.join('\n\n')}`;
-        return bot.sendMessage(chatId, message, { parse_mode: 'Markdown' });
-      } catch (error) {
-        console.error('Failed to get pending payments:', error);
-        return bot.sendMessage(chatId, '❌ An error occurred while fetching the pending payments list.');
-      }
-    } // End of /pendingpayments
+            // Delete the user's document from the database
+            await User.deleteOne({ chatId: userIdToDelete });
 
-    if (text === '/stats') { // No need for ADMIN_CHAT_ID check here anymore due to outer guard
-      bot.sendMessage(chatId, '📊 Calculating statistics... Please wait.');
-
-      try {
-        const allUsers = await User.find({});
-
-        let totalRegistrations = 0;
-        let totalApproved = 0;
-        let pendingApproval = 0;
-        let incompleteRegistrations = 0;
-        const languageCount = { en: 0, am: 0, om: 0, unknown: 0 };
-
-        // --- Calculate Reminders Sent Today ---
-        const startOfToday = new Date();
-        startOfToday.setHours(0, 0, 0, 0);
-        const remindedTodayCount = await User.countDocuments({
-          $or: [
-            { last_reminder_sent_at: { $gte: startOfToday } },
-            { 'other_registrations.last_reminder_sent_at': { $gte: startOfToday } }
-          ]
-        });
-        allUsers.forEach(user => {
-          // Count language for primary users
-          if (user.lang) languageCount[user.lang]++;
-          else if (user.name) languageCount.unknown++;
-
-          // Process primary user registration
-          if (user.name) {
-            totalRegistrations++;
-            if (user.approved) totalApproved++;
-            else if (user.payment) pendingApproval++;
-            else incompleteRegistrations++;
+            return bot.sendMessage(chatId, `✅ Successfully deleted all data for user \`${userIdToDelete}\`.`, { parse_mode: 'Markdown' });
+          } catch (error) {
+            console.error('Error deleting user:', error);
+            return bot.sendMessage(chatId, '❌ An error occurred while trying to delete the user.', { parse_mode: 'Markdown' });
           }
+        } // End of /deleteuser
 
-          // Process other registrations
-          if (user.other_registrations) {
-            user.other_registrations.forEach(reg => {
-              if (reg.name) { // Only count if registration was started
+        if (text === '/broadcast') {
+          user.step = 'broadcast_message';
+          await user.save();
+          return bot.sendMessage(chatId, 'Please send the message you want to broadcast to all users. Send /cancel to abort.');
+        } // End of /broadcast
+
+        if (text === '/exportusers') {
+          bot.sendMessage(chatId, '🔄 Generating user export... Please wait.');
+
+          try {
+            // Find all users who have at least started registration
+            const allUsers = await User.find({ name: { $ne: null } });
+
+            if (allUsers.length === 0) {
+              return bot.sendMessage(chatId, 'No registered users found to export.');
+            }
+
+            const csvHeaders = [
+              'UserID', 'Name', 'Email', 'Phone', 'Location', 'Status', 'RegisteredBy_ID', 'RegisteredBy_Name', 'FeelingBefore', 'FeelingAfter'
+            ];
+
+            const escapeCsv = (field) => {
+              if (field === null || field === undefined) return '';
+              const str = String(field);
+              // If the string contains a comma, double quote, or newline, wrap it in double quotes
+              if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+                // Also, double up any existing double quotes
+                return `"${str.replace(/"/g, '""')}"`;
+              }
+              return str;
+            };
+
+            const getStatus = (reg) => {
+              if (reg.approved) return 'Approved';
+              if (reg.payment) return 'Pending Approval';
+              if (reg.phone) return 'Pending Payment';
+              return 'Incomplete';
+            };
+
+            const userRows = allUsers.flatMap(user => {
+              // Row for the primary user
+              const primaryUserRow = [
+                user.chatId, user.name, user.email, user.phone, user.location, getStatus(user), 'self', 'self', user.feeling_before, user.feeling_after
+              ].map(escapeCsv).join(',');
+
+              // Rows for other people they registered
+              const otherUserRows = (user.other_registrations || []).map(otherReg => {
+                return [
+                  otherReg.phone || 'N/A', otherReg.name, otherReg.email, otherReg.phone, otherReg.location, getStatus(otherReg), user.chatId, user.name
+                ].map(escapeCsv).join(',');
+              });
+
+              return [primaryUserRow, ...otherUserRows];
+            });
+
+            const csvContent = [csvHeaders.join(','), ...userRows].join('\n');
+            const fileBuffer = Buffer.from(csvContent, 'utf8');
+
+            bot.sendDocument(chatId, fileBuffer, {}, {
+              filename: `user_export_${new Date().toISOString().split('T')[0]}.csv`,
+              contentType: 'text/csv'
+            });
+          } catch (error) {
+            console.error('Failed to export users:', error);
+            bot.sendMessage(chatId, '❌ An error occurred while generating the user export.');
+          }
+          return;
+        } // End of /exportusers
+
+        if (text === '/pendingpayments') {
+          bot.sendMessage(chatId, '🔍 Searching for pending payments...');
+
+          try {
+            // Find users with pending payments (for themselves or for others)
+            const usersWithPending = await User.find({
+              $or: [
+                { payment: { $ne: null }, approved: false },
+                { 'other_registrations.payment': { $ne: null }, 'other_registrations.approved': false }
+              ]
+            });
+
+            if (usersWithPending.length === 0) {
+              return bot.sendMessage(chatId, '✅ No pending payments found.');
+            }
+
+            let pendingList = [];
+            usersWithPending.forEach(user => {
+              // Check the main user's payment
+              if (user.payment && !user.approved) {
+                pendingList.push(`*User:* ${user.name} (ID: \`${user.chatId}\`)\n  - To approve, send: \`/approve ${user.chatId}\``);
+              }
+
+              // Check payments for others registered by this user
+              user.other_registrations.forEach((reg, index) => {
+                if (reg.payment && !reg.approved) {
+                  pendingList.push(`*For:* ${reg.name} (Registered by ${user.name})\n  - To approve, send: \`/approve_other ${user.chatId} ${index}\``);
+                }
+              });
+            });
+
+            const message = `*⏳ Pending Payment Approvals*\n\n${pendingList.join('\n\n')}`;
+            return bot.sendMessage(chatId, message, { parse_mode: 'Markdown' });
+          } catch (error) {
+            console.error('Failed to get pending payments:', error);
+            return bot.sendMessage(chatId, '❌ An error occurred while fetching the pending payments list.');
+          }
+        } // End of /pendingpayments
+
+        if (text === '/stats') {
+          bot.sendMessage(chatId, '📊 Calculating statistics... Please wait.');
+
+          try {
+            const allUsers = await User.find({});
+
+            let totalRegistrations = 0;
+            let totalApproved = 0;
+            let pendingApproval = 0;
+            let incompleteRegistrations = 0;
+            const languageCount = { en: 0, am: 0, om: 0, unknown: 0 };
+
+            // --- Calculate Reminders Sent Today ---
+            const startOfToday = new Date();
+            startOfToday.setHours(0, 0, 0, 0);
+            const remindedTodayCount = await User.countDocuments({
+              $or: [
+                { last_reminder_sent_at: { $gte: startOfToday } },
+                { 'other_registrations.last_reminder_sent_at': { $gte: startOfToday } }
+              ]
+            });
+            allUsers.forEach(user => {
+              // Count language for primary users
+              if (user.lang) languageCount[user.lang]++;
+              else if (user.name) languageCount.unknown++;
+
+              // Process primary user registration
+              if (user.name) {
                 totalRegistrations++;
-                if (reg.approved) totalApproved++;
-                else if (reg.payment) pendingApproval++;
+                if (user.approved) totalApproved++;
+                else if (user.payment) pendingApproval++;
                 else incompleteRegistrations++;
               }
+
+              // Process other registrations
+              if (user.other_registrations) {
+                user.other_registrations.forEach(reg => {
+                  if (reg.name) { // Only count if registration was started
+                    totalRegistrations++;
+                    if (reg.approved) totalApproved++;
+                    else if (reg.payment) pendingApproval++;
+                    else incompleteRegistrations++;
+                  }
+                });
+              }
             });
+
+            const statsMessage = `*📊 Bot Usage Statistics*\n\n` +
+              `*Total Registrations:* ${totalRegistrations}\n` +
+              `*Approved Users:* ${totalApproved}\n` +
+              `*Pending Approval:* ${pendingApproval}\n` +
+              `*Reminders Sent Today:* ${remindedTodayCount}\n` +
+              `*Incomplete (No Payment):* ${incompleteRegistrations}\n\n` +
+              `*Language Breakdown (Primary Users):*\n  - English: ${languageCount.en}\n  - አማርኛ: ${languageCount.am}\n  - Afaan Oromoo: ${languageCount.om}`;
+
+            return bot.sendMessage(chatId, statsMessage, { parse_mode: 'Markdown' });
+          } catch (error) {
+            console.error('Failed to generate stats:', error);
+            return bot.sendMessage(chatId, '❌ An error occurred while generating statistics.');
           }
-        });
+        } // End of /stats
 
-        const statsMessage = `*📊 Bot Usage Statistics*\n\n` +
-          `*Total Registrations:* ${totalRegistrations}\n` +
-          `*Approved Users:* ${totalApproved}\n` +
-          `*Pending Approval:* ${pendingApproval}\n` +
-          `*Reminders Sent Today:* ${remindedTodayCount}\n` +
-          `*Incomplete (No Payment):* ${incompleteRegistrations}\n\n` +
-          `*Language Breakdown (Primary Users):*\n  - English: ${languageCount.en}\n  - አማርኛ: ${languageCount.am}\n  - Afaan Oromoo: ${languageCount.om}`;
+        if (text === '/incomplete') {
+          bot.sendMessage(chatId, '🔍 Searching for incomplete registrations (payment not uploaded)...');
 
-        return bot.sendMessage(chatId, statsMessage, { parse_mode: 'Markdown' });
-      } catch (error) {
-        console.error('Failed to generate stats:', error);
-        return bot.sendMessage(chatId, '❌ An error occurred while generating statistics.');
-      }
-    } // End of /stats
+          try {
+            // --- NEW: Find any user who is currently in a registration step ---
+            const usersWithIncomplete = await User.find({ step: { $ne: null } });
 
-    if (text === '/incomplete') { // No need for ADMIN_CHAT_ID check here anymore due to outer guard
-      bot.sendMessage(chatId, '🔍 Searching for incomplete registrations (payment not uploaded)...');
-
-      try {
-        // --- NEW: Find any user who is currently in a registration step ---
-        const usersWithIncomplete = await User.find({ step: { $ne: null } });
-
-        if (usersWithIncomplete.length === 0) {
-          return bot.sendMessage(chatId, '✅ No incomplete registrations found.');
-        }
-
-        const keyboardButtons = [];
-        usersWithIncomplete.forEach(user => {
-          let userName = user.name || `User ID: ${user.chatId}`;
-          let stepInfo = user.step.replace('_other', ' (for other)');
-
-          // If registering for someone else, identify who
-          if (user.step.endsWith('_other')) {
-            const regIndex = user.current_other_reg_index ?? user.other_registrations.length - 1;
-            const reg = user.other_registrations[regIndex];
-            if (reg && reg.name) {
-              userName = `${user.name} (for ${reg.name})`;
+            if (usersWithIncomplete.length === 0) {
+              return bot.sendMessage(chatId, '✅ No incomplete registrations found.');
             }
-          }
 
-          keyboardButtons.push([{
-            text: `👤 ${userName} | Stuck on: ${stepInfo}`,
-            callback_data: `remind_user:${user.chatId}:-1` // Index is no longer needed here
-          }]);
-        });
+            const keyboardButtons = [];
+            usersWithIncomplete.forEach(user => {
+              let userName = user.name || `User ID: ${user.chatId}`;
+              let stepInfo = user.step.replace('_other', ' (for other)');
 
-        const message = `*📝 Incomplete Registrations*\n\nClick a user to send them a reminder for their current step.`;
-        return bot.sendMessage(chatId, message, {
-          parse_mode: 'Markdown',
-          reply_markup: { inline_keyboard: keyboardButtons }
-        });
-      } catch (error) {
-        console.error('Failed to get incomplete registrations:', error);
-        return bot.sendMessage(chatId, '❌ An error occurred while fetching the incomplete registrations list.');
-      }
-    } // End of /incomplete
+              // If registering for someone else, identify who
+              if (user.step.endsWith('_other')) {
+                const regIndex = user.current_other_reg_index ?? user.other_registrations.length - 1;
+                const reg = user.other_registrations[regIndex];
+                if (reg && reg.name) {
+                  userName = `${user.name} (for ${reg.name})`;
+                }
+              }
 
-    if (text === '/feelings') { // No need for ADMIN_CHAT_ID check here anymore due to outer guard
-      bot.sendMessage(chatId, '📝 Generating summary of user feelings...');
-
-      try {
-        const usersWithFeelings = await User.find({
-          $or: [
-            { feeling_before: { $ne: null, $ne: '' } },
-            { feeling_after: { $ne: null, $ne: '' } }
-          ]
-        });
-
-        if (usersWithFeelings.length === 0) {
-          return bot.sendMessage(chatId, 'No user feelings have been submitted yet.');
-        }
-
-        const messages = [];
-        let currentMessage = '*📝 Summary of User Feelings*\n\n';
-
-        for (const user of usersWithFeelings) {
-          const entry = `*User:* ${user.name} (\`${user.chatId}\`)\n` +
-                        (user.feeling_before ? `*Before:* ${user.feeling_before}\n` : '') +
-                        (user.feeling_after ? `*After:* ${user.feeling_after}\n` : '') +
-                        '--------------------\n\n';
-
-          if (currentMessage.length + entry.length > 4096) {
-            messages.push(currentMessage);
-            currentMessage = '';
-          }
-          currentMessage += entry;
-        }
-        messages.push(currentMessage);
-
-        for (const message of messages) {
-          await bot.sendMessage(chatId, message, { parse_mode: 'Markdown' });
-        }
-      } catch (error) {
-        console.error('Failed to get feelings summary:', error);
-        return bot.sendMessage(chatId, '❌ An error occurred while fetching the feelings summary.');
-      }
-    } // End of /feelings
-
-    if (text === '/remindfeelings') { // No need for ADMIN_CHAT_ID check here anymore due to outer guard
-      bot.sendMessage(chatId, '🔍 Finding users who need a feeling reminder...');
-
-      try {
-        // Find approved users who are missing at least one feeling
-        const usersToRemind = await User.find({
-          approved: true,
-          $or: [
-            { feeling_before: null },
-            { feeling_after: null }
-          ]
-        });
-
-        if (usersToRemind.length === 0) {
-          return bot.sendMessage(chatId, '✅ All approved users have submitted their feelings.');
-        }
-
-        let currentMessage = '*📝 Users Missing Feelings*\n\n';
-
-        for (const user of usersToRemind) {
-          const buttons = [];
-          if (!user.feeling_before) {
-            buttons.push({ text: 'Remind Before', callback_data: `remind_feeling:before:${user.chatId}` });
-          }
-          if (!user.feeling_after) {
-            buttons.push({ text: 'Remind After', callback_data: `remind_feeling:after:${user.chatId}` });
-          }
-
-          if (buttons.length > 0) {
-            await bot.sendMessage(chatId, `*User:* ${user.name} (\`${user.chatId}\`)`, {
-              parse_mode: 'Markdown',
-              reply_markup: { inline_keyboard: [buttons] }
+              keyboardButtons.push([{
+                text: `👤 ${userName} | Stuck on: ${stepInfo}`,
+                callback_data: `remind_user:${user.chatId}:-1` // Index is no longer needed here
+              }]);
             });
-          }
-        }
 
-      } catch (error) {
-        console.error('Failed to get users for feeling reminders:', error);
-        return bot.sendMessage(chatId, '❌ An error occurred while fetching the user list.');
+            const message = `*📝 Incomplete Registrations*\n\nClick a user to send them a reminder for their current step.`;
+            return bot.sendMessage(chatId, message, {
+              parse_mode: 'Markdown',
+              reply_markup: { inline_keyboard: keyboardButtons }
+            });
+          } catch (error) {
+            console.error('Failed to get incomplete registrations:', error);
+            return bot.sendMessage(chatId, '❌ An error occurred while fetching the incomplete registrations list.');
+          }
+        } // End of /incomplete
+
+        if (text === '/feelings') {
+          bot.sendMessage(chatId, '📝 Generating summary of user feelings...');
+
+          try {
+            const usersWithFeelings = await User.find({
+              $or: [
+                { feeling_before: { $ne: null, $ne: '' } },
+                { feeling_after: { $ne: null, $ne: '' } }
+              ]
+            });
+
+            if (usersWithFeelings.length === 0) {
+              return bot.sendMessage(chatId, 'No user feelings have been submitted yet.');
+            }
+
+            const messages = [];
+            let currentMessage = '*📝 Summary of User Feelings*\n\n';
+
+            for (const user of usersWithFeelings) {
+              const entry = `*User:* ${user.name} (\`${user.chatId}\`)\n` +
+                            (user.feeling_before ? `*Before:* ${user.feeling_before}\n` : '') +
+                            (user.feeling_after ? `*After:* ${user.feeling_after}\n` : '') +
+                            '--------------------\n\n';
+
+              if (currentMessage.length + entry.length > 4096) {
+                messages.push(currentMessage);
+                currentMessage = '';
+              }
+              currentMessage += entry;
+            }
+            messages.push(currentMessage);
+
+            for (const message of messages) {
+              await bot.sendMessage(chatId, message, { parse_mode: 'Markdown' });
+            }
+          } catch (error) {
+            console.error('Failed to get feelings summary:', error);
+            return bot.sendMessage(chatId, '❌ An error occurred while fetching the feelings summary.');
+          }
+          return;
+        } // End of /feelings
+
+        if (text === '/remindfeelings') {
+          bot.sendMessage(chatId, '🔍 Finding users who need a feeling reminder...');
+
+          try {
+            // Find approved users who are missing at least one feeling
+            const usersToRemind = await User.find({
+              approved: true,
+              $or: [
+                { feeling_before: null },
+                { feeling_after: null }
+              ]
+            });
+
+            if (usersToRemind.length === 0) {
+              return bot.sendMessage(chatId, '✅ All approved users have submitted their feelings.');
+            }
+
+            let currentMessage = '*📝 Users Missing Feelings*\n\n';
+
+            for (const user of usersToRemind) {
+              const buttons = [];
+              if (!user.feeling_before) {
+                buttons.push({ text: 'Remind Before', callback_data: `remind_feeling:before:${user.chatId}` });
+              }
+              if (!user.feeling_after) {
+                buttons.push({ text: 'Remind After', callback_data: `remind_feeling:after:${user.chatId}` });
+              }
+
+              if (buttons.length > 0) {
+                await bot.sendMessage(chatId, `*User:* ${user.name} (\`${user.chatId}\`)`, {
+                  parse_mode: 'Markdown',
+                  reply_markup: { inline_keyboard: [buttons] }
+                });
+              }
+            }
+
+          } catch (error) {
+            console.error('Failed to get users for feeling reminders:', error);
+            return bot.sendMessage(chatId, '❌ An error occurred while fetching the user list.');
+          }
+          return;
+        } // End of /remindfeelings
       }
-    } // End of /remindfeelings
+    }
+    // If it's not an admin command, it's a regular slash command like /start, which we already handle
+    // But we need to let /start through, so we'll check for it here
+    if (text === '/start') {
+      // /start is handled by bot.onText, so we don't need to handle it here
+      return;
+    }
+    // For any other slash command that's not handled, just return
     return;
+  }
+  
+  // --- NEW: Handle "Continue Registration" from the main menu keyboard ---
+  if (text === langText[lang].continueRegistrationButton) {
+    const step = user.step;
+    if (!step) {
+      // This case should be rare since the button only shows when user.step exists, but it's good practice.
+      return bot.sendMessage(chatId, 'You have no pending registration steps.', generateMainMenuKeyboard(lang, user));
+    }
+
+    // The `user.step` from the database is the most reliable source of truth.
+    const stepToDisplay = user.step;
+    console.log(`Continue registration (main menu): Displaying step '${stepToDisplay}'`);
+    return displayCurrentStep(bot, chatId, user, lang, stepToDisplay);
   }
 
   // Main menu buttons
@@ -1279,7 +1480,15 @@ bot.on('message', async (msg) => {
   }
   
   if (text === 'Register / መዝግብ') {
-    if (user.name) {
+    // --- UPDATED: Check for an incomplete step first ---
+    if (user.step) {
+      // If the user is in the middle of a step, prompt them to continue.
+      const continueKeyboard = {
+        reply_markup: { inline_keyboard: [[{ text: langText[lang].continueRegistrationButton, callback_data: 'continue_registration' }]] }
+      };
+      return bot.sendMessage(chatId, langText[lang].continueRegistrationPrompt, continueKeyboard);
+    } else if (user.name) {
+      // If they are not in a step but are already registered, ask to register another.
       const registerAnotherKeyboard = {
         reply_markup: {
           keyboard: [[{ text: langText[lang].registerAnother }], [{ text: 'Cancel' }]],
@@ -1289,6 +1498,7 @@ bot.on('message', async (msg) => {
       };
       return bot.sendMessage(chatId, langText[lang].alreadyRegistered, registerAnotherKeyboard);
     }
+    // If they have no step and no name, start a new registration.
     user.step = 'name';
     await user.save();
     setUserTimeout(chatId, lang);
@@ -1307,6 +1517,12 @@ bot.on('message', async (msg) => {
     await user.save();
     setUserTimeout(chatId, lang);
     return bot.sendMessage(chatId, langText[lang].askPostRetreatFeeling, { reply_markup: { remove_keyboard: true } });
+  }
+
+  // --- NEW: Handle 'Back' button when user is stuck ---
+  if (text === 'Back') {
+    // Re-display the current step instead of just going to the main menu
+    return displayCurrentStep(bot, chatId, user, lang);
   }
 
 
@@ -1469,12 +1685,46 @@ bot.on('message', async (msg) => {
     return bot.sendMessage(chatId, langText[lang].askPayment);
   }
 
+  // --- NEW: Handle broadcast message step for admin ---
+  if (user.step === 'broadcast_message' && chatId.toString() === ADMIN_CHAT_ID) {
+    if (text === '/cancel') {
+      user.step = null;
+      await user.save();
+      return bot.sendMessage(chatId, 'Broadcast cancelled.', generateMainMenuKeyboard(lang, user));
+    }
+
+    const messageToSend = text;
+    user.step = null; // Clear the step
+    await user.save();
+
+    // Find all users who have completed at least the name step
+    const allUsers = await User.find({ name: { $ne: null } });
+    if (allUsers.length === 0) {
+      return bot.sendMessage(chatId, 'No registered users found to broadcast to.');
+    }
+
+    bot.sendMessage(chatId, `🚀 Starting broadcast to ${allUsers.length} users...`);
+    let successCount = 0;
+    let errorCount = 0;
+
+    for (const target of allUsers) {
+      try {
+        await bot.sendMessage(target.chatId, messageToSend);
+        successCount++;
+      } catch (error) {
+        console.error(`Failed to send message to user ${target.chatId}:`, error.message);
+        errorCount++;
+      }
+    }
+    return bot.sendMessage(chatId, `Broadcast finished.\n\n✅ Successfully sent to: ${successCount} users.\n❌ Failed to send to: ${errorCount} users.`);
+  }
   // --- "Register Another" Steps ---
   if (user.step === 'name_other') {
     if (!/^[\p{L}\s]+$/u.test(text) || !text.includes(' ')) {
       return bot.sendMessage(chatId, langText[lang].invalidName);
     }
     user.other_registrations[user.other_registrations.length - 1].name = text;
+    user.current_other_reg_index = user.other_registrations.length - 1; // Set the index for the current registration
     await user.save();
     user.step = 'email_other';
     await user.save();
