@@ -10,7 +10,7 @@ startServer()
     app.listen(effectivePort, () => {
       console.log(`✅ Bot server is running on port ${effectivePort}`);
     });
-    setTelegramWebhook(bot); // Set the webhook after the server starts listening
+    setTelegramWebhook(); // Call without passing 'bot'
   })
   .catch((error) => {
     console.error('❌ Failed to start server:', error);

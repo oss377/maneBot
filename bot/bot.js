@@ -128,7 +128,7 @@ async function startServer() {
   console.log('✅ Payment reminder job scheduled to run every hour.');
 }
 
-function setTelegramWebhook(bot) {
+function setTelegramWebhook() { // Removed 'bot' parameter
   // Set the webhook programmatically if the Railway URL is provided
   const RAILWAY_STATIC_URL = process.env.RAILWAY_STATIC_URL;
   if (RAILWAY_STATIC_URL) {
