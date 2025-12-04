@@ -143,5 +143,6 @@ module.exports = {
   bot,
   app,
   startServer,
-  PORT
+  PORT,
+  setTelegramWebhook
 };
