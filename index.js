@@ -1,3 +1,6 @@
+const dotenv = require('dotenv');
+dotenv.config(); // Load environment variables as early as possible
+
 const { app, startServer, PORT, bot } = require('./bot/bot');
 
 // Start the server
