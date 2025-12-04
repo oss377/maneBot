@@ -1,4 +1,4 @@
-const { app, startServer, PORT } = require('./bot/bot');
+const { app, startServer, PORT, bot } = require('./bot/bot');
 
 // Start the server
 const RAILWAY_STATIC_URL = process.env.RAILWAY_STATIC_URL;
