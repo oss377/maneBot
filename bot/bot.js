@@ -23,8 +23,8 @@ if (!token) {
 const app = express();
 app.use(bodyParser.json());
 
-// Telegram bot
-const bot = new TelegramBot(token);
+// Telegram bot - IMPORTANT: Add polling: false for webhook mode
+const bot = new TelegramBot(token, { polling: false });
 
 // Webhook path
 const webhookPath = '/webhook';
@@ -57,7 +57,25 @@ function setupBotHandlers() {
   bot.on('message', async (msg) => { // This is the main message handler
     await handleMessage(bot, msg);
   });
+}
 
+// --- WEBHOOK SETUP FUNCTION ---
+async function setTelegramWebhook() {
+  const webhookUrl = `https://${process.env.RAILWAY_STATIC_URL || `localhost:${PORT}`}${webhookPath}`;
+  
+  console.log(`Setting webhook to ${webhookUrl}`);
+  
+  try {
+    // CORRECT: Capital H in setWebHook
+    await bot.setWebHook(webhookUrl, {
+      secret_token: SECRET_TOKEN,
+      max_connections: 40
+    });
+    console.log('✅ Webhook set successfully');
+  } catch (error) {
+    console.error('❌ Failed to set webhook:', error.message);
+    // Continue without webhook - bot will still work with polling
+  }
 }
 
 // --- Scheduled Reminder Job ---
@@ -114,30 +132,28 @@ const checkPendingPayments = async () => {
 // Start Express server
 async function startServer() {
   await connectDB(); // Connect to the database
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Webhook endpoint: http://localhost:${PORT}${webhookPath}`);
-  console.log(
-    `Set the webhook:\nhttps://api.telegram.org/bot${token}/setWebhook?url=https://YOUR_NGROK_URL${webhookPath}&secret_token=${SECRET_TOKEN}`
-  );
-
+  
   // Setup bot handlers
   setupBotHandlers();
+  
+  // Start the server
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+    console.log(`Webhook endpoint: http://localhost:${PORT}${webhookPath}`);
+    
+    // Set webhook automatically in production
+    if (process.env.NODE_ENV === 'production' || process.env.RAILWAY_STATIC_URL) {
+      setTelegramWebhook();
+    } else {
+      console.log(
+        `Set the webhook manually:\nhttps://api.telegram.org/bot${token}/setWebhook?url=https://YOUR_NGROK_URL${webhookPath}&secret_token=${SECRET_TOKEN}`
+      );
+    }
+  });
 
   // Run the reminder job every hour (3600000 milliseconds)
   setInterval(checkPendingPayments, 3600000);
   console.log('✅ Payment reminder job scheduled to run every hour.');
-}
-
-function setTelegramWebhook() { // Removed 'bot' parameter
-  // Set the webhook programmatically if the Railway URL is provided
-  const RAILWAY_STATIC_URL = process.env.RAILWAY_STATIC_URL;
-  if (RAILWAY_STATIC_URL) {
-    const webhookUrl = `${RAILWAY_STATIC_URL}${webhookPath}`;
-    console.log(`Setting webhook to ${webhookUrl}`);
-    bot.setWebhook(webhookUrl, { secret_token: SECRET_TOKEN }).then(result => {
-      console.log('Webhook set successfully:', result);
-    }).catch(err => console.error('Failed to set webhook:', err.message));
-  }
 }
 
 module.exports = {
@@ -145,5 +161,5 @@ module.exports = {
   app,
   startServer,
   PORT,
-  setTelegramWebhook
+  setTelegramWebhook  // Export the function
 };
