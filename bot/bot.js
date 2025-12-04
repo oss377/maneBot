@@ -126,11 +126,12 @@ async function startServer() {
   // Run the reminder job every hour (3600000 milliseconds)
   setInterval(checkPendingPayments, 3600000);
   console.log('✅ Payment reminder job scheduled to run every hour.');
+}
 
+function setTelegramWebhook(bot) {
   // Set the webhook programmatically if the Railway URL is provided
   const RAILWAY_STATIC_URL = process.env.RAILWAY_STATIC_URL;
   if (RAILWAY_STATIC_URL) {
-    const webhookUrl = `${RAILWAY_STATIC_URL}${webhookPath}`;
     console.log(`Setting webhook to ${webhookUrl}`);
     bot.setWebhook(webhookUrl, { secret_token: SECRET_TOKEN }).then(result => {
       console.log('Webhook set successfully:', result);

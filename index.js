@@ -1,8 +1,7 @@
 const dotenv = require('dotenv');
 dotenv.config(); // Load environment variables as early as possible
 
-const { app, startServer, PORT, bot } = require('./bot/bot');
-
+const { app, startServer, PORT, bot, setTelegramWebhook } = require('./bot/bot');
 // Start the server
 startServer()
   .then(() => {
@@ -11,6 +10,7 @@ startServer()
     app.listen(effectivePort, () => {
       console.log(`✅ Bot server is running on port ${effectivePort}`);
     });
+    setTelegramWebhook(bot); // Set the webhook after the server starts listening
   })
   .catch((error) => {
     console.error('❌ Failed to start server:', error);
