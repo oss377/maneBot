@@ -20,7 +20,6 @@ const profileKeyboard = (lang, user) => {
   if (user.step && user.step !== 'select_lang') {
     keyboard.push([{ text: langText[lang].continueRegistrationButton, callback_data: 'continue_registration' }]);
   }
-
   return { inline_keyboard: keyboard };
 };
 
