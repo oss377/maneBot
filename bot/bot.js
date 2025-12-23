@@ -1,4 +1,5 @@
-const TelegramBot = require('node-telegram-bot-api');
+const { Telegraf, session, Markup } = require('telegraf');
+const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
 const { token, PORT, SECRET_TOKEN, ADMIN_CHAT_ID, GROUP_LINK } = require('../config/constants');
@@ -28,16 +29,16 @@ const isProduction = process.env.NODE_ENV === 'production';
 const isRailway = !!process.env.RAILWAY_STATIC_URL;
 const usePolling = process.env.USE_POLLING === 'true' || !isProduction || !isRailway;
 
-// Telegram bot - dynamic mode based on environment
+// Initialize Telegraf bot
 console.log(`🚀 Starting in ${usePolling ? 'POLLING' : 'WEBHOOK'} mode`);
-const bot = new TelegramBot(token, { 
-  polling: usePolling,  // true for local, false for production
-  request: {
-    // Optional: Proxy for local development if needed
-    agent: process.env.HTTPS_PROXY ? 
-           new (require('https-proxy-agent'))(process.env.HTTPS_PROXY) : 
-           undefined
-  }
+const bot = new Telegraf(token);
+
+// Session middleware
+bot.use(session());
+
+// Handle unhandled rejections to prevent crashes
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('❌ Unhandled Rejection:', reason);
 });
 
 // Webhook path
@@ -52,7 +53,8 @@ app.post(webhookPath, (req, res) => {
   
   const secret = req.headers['x-telegram-bot-api-secret-token'];
   if (secret !== SECRET_TOKEN) return res.sendStatus(401);
-  bot.processUpdate(req.body);
+  
+  bot.handleUpdate(req.body);
   res.sendStatus(200);
 });
 
@@ -69,23 +71,52 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Setup bot event handlers
-function setupBotHandlers() {
-  // /start command
-  bot.onText(/\/start(?: (.+))?/, async (msg, match) => {
-    await handleStart(bot, msg, match);
-  });
+// --- TELEGRAF BOT HANDLERS ---
 
-  // Handle callback queries
-  bot.on('callback_query', async (callbackQuery) => {
-    await handleCallbackQuery(bot, callbackQuery);
-  });
+// /start command
+bot.start(async (ctx) => {
+  await handleStart(ctx);
+});
 
-  // Handle messages
-  bot.on('message', async (msg) => {
-    await handleMessage(bot, msg);
-  });
-}
+// Handle callback queries
+bot.on('callback_query', async (ctx) => {
+  await handleCallbackQuery(ctx);
+});
+
+// Handle messages
+bot.on('message', async (ctx) => {
+  await handleMessage(ctx);
+});
+
+// Handle text commands
+bot.command('help', async (ctx) => {
+  const lang = ctx.session?.lang || 'en';
+  const helpText = `
+${langText[lang].helpTitle || 'Help Center'}
+
+${langText[lang].helpText || 'Available commands:\n/start - Start the bot\n/help - Show this help message'}
+
+${langText[lang].adminCommands || ''}`;
+  
+  ctx.reply(helpText);
+});
+
+// Error handling
+bot.catch((err, ctx) => {
+  console.error(`❌ Error for ${ctx.updateType}:`, err);
+  ctx.reply('❌ An error occurred. Please try again later.');
+});
+
+// CORRECTED: Handle polling/webhook errors in Telegraf
+// Telegraf doesn't have bot.telegram.on, use bot.on instead
+bot.on('webhook_error', (err) => {
+  console.error('🔌 Webhook error:', err);
+});
+
+// The polling_error event is handled automatically by Telegraf
+// But we can listen to connection issues
+process.on('SIGINT', () => bot.stop('SIGINT'));
+process.on('SIGTERM', () => bot.stop('SIGTERM'));
 
 // --- WEBHOOK SETUP FUNCTION ---
 async function setTelegramWebhook() {
@@ -100,14 +131,15 @@ async function setTelegramWebhook() {
   console.log(`🌐 Setting webhook to ${webhookUrl}`);
   
   try {
-    await bot.setWebHook(webhookUrl, {
+    // Telegraf uses bot.telegram.setWebhook
+    await bot.telegram.setWebhook(webhookUrl, {
       secret_token: SECRET_TOKEN,
       max_connections: 40
     });
     console.log('✅ Webhook set successfully');
     
     // Get webhook info to verify
-    const webhookInfo = await bot.getWebHookInfo();
+    const webhookInfo = await bot.telegram.getWebhookInfo();
     console.log('📊 Webhook info:', {
       url: webhookInfo.url,
       has_custom_certificate: webhookInfo.has_custom_certificate,
@@ -117,13 +149,6 @@ async function setTelegramWebhook() {
     });
   } catch (error) {
     console.error('❌ Failed to set webhook:', error.message);
-    
-    // Fallback to polling if webhook fails in production
-    if (isProduction || isRailway) {
-      console.log('🔄 Critical: Webhook failed in production. Trying polling as fallback...');
-      // Note: node-telegram-bot-api doesn't support switching from webhook to polling easily
-      // This is just for logging - you might need to restart with polling enabled
-    }
   }
 }
 
@@ -136,9 +161,7 @@ const checkPendingPayments = async () => {
     // Find users with pending payments that are older than 24 hours
     const usersToRemind = await User.find({
       $or: [
-        // For their own registration
         { payment: null, approved: false, payment_pending_since: { $lt: twentyFourHoursAgo } },
-        // For a registration they made for someone else
         { 'other_registrations.payment': null, 'other_registrations.approved': false, 'other_registrations.payment_pending_since': { $lt: twentyFourHoursAgo } }
       ]
     });
@@ -152,10 +175,10 @@ const checkPendingPayments = async () => {
       if (user.payment === null && !user.approved && user.payment_pending_since && user.payment_pending_since < twentyFourHoursAgo) {
         console.log(`📨 Sending reminder to user ${user.chatId} for their own payment.`);
         try {
-          await bot.sendMessage(user.chatId, `🔔 *Reminder*\n\n${langText[lang].finishPaymentPrompt}`, { 
+          await bot.telegram.sendMessage(user.chatId, `🔔 *Reminder*\n\n${langText[lang].finishPaymentPrompt}`, { 
             parse_mode: 'Markdown' 
           });
-          // Reset the timestamp to avoid sending another reminder for the next 24 hours
+          // Reset the timestamp
           user.payment_pending_since = new Date();
           user.last_reminder_sent_at = new Date();
           await user.save();
@@ -171,7 +194,7 @@ const checkPendingPayments = async () => {
           console.log(`📨 Sending reminder to user ${user.chatId} for ${reg.name}'s payment.`);
           try {
             const reminderMsg = `🔔 *Reminder*\n\nYou still need to upload the payment screenshot for *${reg.name}* to complete their registration.`;
-            await bot.sendMessage(user.chatId, reminderMsg, { parse_mode: 'Markdown' });
+            await bot.telegram.sendMessage(user.chatId, reminderMsg, { parse_mode: 'Markdown' });
             // Reset the timestamp
             reg.payment_pending_since = new Date();
             reg.last_reminder_sent_at = new Date();
@@ -197,16 +220,14 @@ async function startServer() {
     await connectDB();
     console.log('✅ MongoDB Connected Successfully');
     
-    // Setup bot handlers
-    setupBotHandlers();
-    console.log('✅ Bot handlers registered');
-    
     // Start the server
-    app.listen(PORT, () => {
+    app.listen(PORT, async () => {
       console.log(`🌐 Server running on port ${PORT}`);
       console.log(`📡 Mode: ${usePolling ? 'POLLING' : 'WEBHOOK'}`);
       
       if (usePolling) {
+        // Start polling with Telegraf
+        await bot.launch();
         console.log('🤖 Bot is actively polling for updates...');
         console.log('💡 Send /start to your bot to test locally');
       } else {
@@ -214,7 +235,7 @@ async function startServer() {
         
         // Set webhook for production
         if (isProduction || isRailway) {
-          setTelegramWebhook();
+          await setTelegramWebhook();
         } else {
           console.log('\n⚠️  Local Webhook Setup:');
           console.log('1. Use ngrok: ngrok http ' + PORT);
@@ -224,7 +245,7 @@ async function startServer() {
       }
     });
 
-    // Run the reminder job every hour (3600000 milliseconds)
+    // Run the reminder job every hour
     setInterval(checkPendingPayments, 3600000);
     console.log('✅ Payment reminder job scheduled to run every hour.');
     
@@ -238,30 +259,30 @@ async function startServer() {
 }
 
 // Handle graceful shutdown
-process.on('SIGINT', async () => {
-  console.log('\n🛑 Received SIGINT. Shutting down gracefully...');
+const shutdown = async () => {
+  console.log('\n🛑 Shutting down gracefully...');
   
-  if (usePolling) {
-    console.log('🛑 Stopping bot polling...');
-    bot.stopPolling();
-  } else {
-    console.log('🛑 Deleting webhook...');
-    try {
-      await bot.deleteWebHook();
-      console.log('✅ Webhook deleted');
-    } catch (error) {
-      console.error('❌ Failed to delete webhook:', error.message);
-    }
+  try {
+    // Telegraf handles its own graceful shutdown
+    await bot.stop();
+    console.log('✅ Bot stopped gracefully');
+  } catch (error) {
+    console.error('❌ Error stopping bot:', error.message);
+  }
+
+  try {
+    await mongoose.connection.close();
+    console.log('✅ MongoDB connection closed');
+  } catch (err) {
+    console.error('❌ Error closing MongoDB connection:', err.message);
   }
   
   console.log('👋 Goodbye!');
   process.exit(0);
-});
+};
 
-process.on('SIGTERM', async () => {
-  console.log('\n🛑 Received SIGTERM. Shutting down...');
-  process.exit(0);
-});
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
 
 module.exports = {
   bot,

@@ -40,6 +40,6 @@ const UserSchema = new mongoose.Schema({
   current_other_reg_index: { type: Number },
 });
 
-const User = mongoose.model('User', UserSchema);
+const User = mongoose.model('telegram_bot_User', UserSchema);
 
 module.exports = User;
