@@ -10,12 +10,20 @@ const {
   declineOtherUser
 } = require('./adminHandlers');
 
-async function handleCallbackQuery(botInstance, callbackQuery) {
-  const msg = callbackQuery.message;
-  const chatId = msg.chat.id;
-  const action = callbackQuery.data;
-  const user = await User.findOne({ chatId });
-  const lang = user ? (user.lang || 'en') : 'en'; // lang is guaranteed to be set here due to /start logic
+async function handleCallbackQuery(ctx) {
+  // Extract data from Telegraf context
+  const action = ctx.callbackQuery.data;
+  const msg = ctx.callbackQuery.message;
+  const chatId = msg ? msg.chat.id : ctx.callbackQuery.from.id;
+  const callbackQueryId = ctx.callbackQuery.id;
+  
+  // Find user - try by chatId first, then by callbackQuery.from.id
+  let user = await User.findOne({ chatId: chatId });
+  if (!user && ctx.callbackQuery.from) {
+    user = await User.findOne({ chatId: ctx.callbackQuery.from.id });
+  }
+  
+  const lang = user ? (user.lang || 'en') : 'en';
 
   // --- ADMIN CALLBACKS ---
   if (chatId.toString() === ADMIN_CHAT_ID && action.startsWith('/')) {
@@ -24,106 +32,191 @@ async function handleCallbackQuery(botInstance, callbackQuery) {
     const targetChatId = parts[1];
     const regIndex = parts[2] ? parseInt(parts[2], 10) : null;
 
-    if (command === '/approve' && targetChatId) {
-      await approveUser(botInstance, targetChatId, chatId);
-      botInstance.answerCallbackQuery(callbackQuery.id, { text: '✅ User approved!' });
-      return botInstance.editMessageCaption(`${msg.caption}\n\n---\n✅ Approved by admin.`, { chat_id: chatId, message_id: msg.message_id });
+    try {
+      if (command === '/approve' && targetChatId) {
+        await approveUser(ctx.telegram, targetChatId, chatId);
+        await ctx.answerCbQuery({ text: '✅ User approved!' });
+        
+        if (msg && msg.caption) {
+          return ctx.editMessageCaption(
+            `${msg.caption}\n\n---\n✅ Approved by admin.`,
+            { message_id: msg.message_id }
+          );
+        }
+        return;
+      }
+      
+      if (command === '/decline' && targetChatId) {
+        await declineUser(ctx.telegram, targetChatId, chatId);
+        await ctx.answerCbQuery({ text: '❌ User declined.' });
+        
+        if (msg && msg.caption) {
+          return ctx.editMessageCaption(
+            `${msg.caption}\n\n---\n❌ Declined by admin.`,
+            { message_id: msg.message_id }
+          );
+        }
+        return;
+      }
+      
+      if (command === '/approve_other' && targetChatId && regIndex !== null) {
+        await approveOtherUser(ctx.telegram, targetChatId, regIndex, chatId);
+        await ctx.answerCbQuery({ text: '✅ User approved!' });
+        
+        if (msg && msg.caption) {
+          return ctx.editMessageCaption(
+            `${msg.caption}\n\n---\n✅ Approved by admin.`,
+            { message_id: msg.message_id }
+          );
+        }
+        return;
+      }
+      
+      if (command === '/decline_other' && targetChatId && regIndex !== null) {
+        await declineOtherUser(ctx.telegram, targetChatId, regIndex, chatId);
+        await ctx.answerCbQuery({ text: '❌ User declined.' });
+        
+        if (msg && msg.caption) {
+          return ctx.editMessageCaption(
+            `${msg.caption}\n\n---\n❌ Declined by admin.`,
+            { message_id: msg.message_id }
+          );
+        }
+        return;
+      }
+    } catch (error) {
+      console.error('Admin callback error:', error);
+      await ctx.answerCbQuery({ text: '❌ Error processing request' });
     }
-    if (command === '/decline' && targetChatId) {
-      await declineUser(botInstance, targetChatId, chatId);
-      botInstance.answerCallbackQuery(callbackQuery.id, { text: '❌ User declined.' });
-      return botInstance.editMessageCaption(`${msg.caption}\n\n---\n❌ Declined by admin.`, { chat_id: chatId, message_id: msg.message_id });
-    }
-    if (command === '/approve_other' && targetChatId && regIndex !== null) {
-      await approveOtherUser(botInstance, targetChatId, regIndex, chatId);
-      botInstance.answerCallbackQuery(callbackQuery.id, { text: '✅ User approved!' });
-      return botInstance.editMessageCaption(`${msg.caption}\n\n---\n✅ Approved by admin.`, { chat_id: chatId, message_id: msg.message_id });
-    }
-    if (command === '/decline_other' && targetChatId && regIndex !== null) {
-      await declineOtherUser(botInstance, targetChatId, regIndex, chatId);
-      botInstance.answerCallbackQuery(callbackQuery.id, { text: '❌ User declined.' });
-      return botInstance.editMessageCaption(`${msg.caption}\n\n---\n❌ Declined by admin.`, { chat_id: chatId, message_id: msg.message_id });
+    // In the admin command section of handleTextMessage (around line 30-100)
+if (text.startsWith('/') && chatId.toString() === ADMIN_CHAT_ID) {
+  const commandMatch = text.match(/^\/(\w+)/);
+  if (commandMatch) {
+    const command = commandMatch[1];
+    const adminCommands = [
+      'approve', 'decline', 'approve_other', 'decline_other',
+      'deleteuser', 'broadcast', 'exportusers', 'pendingpayments',
+      'stats', 'incomplete', 'feelings', 'remindfeelings',
+      'registrars' // ← ADD THIS
+    ];
+
+    if (adminCommands.includes(command)) {
+      // ... existing commands ...
+      
+      if (text === '/registrars') {
+        return await handleRegistrarsList(botInstance, chatId);
+      }
     }
   }
+}
+  }
+  
+
+
+
+
+
+
+
+
   // --- END ADMIN CALLBACKS ---
 
-  if (!user) {
-    return botInstance.answerCallbackQuery(callbackQuery.id, { text: 'User not found!' });
+  // Always answer callback query to prevent timeout
+  try {
+    await ctx.answerCbQuery();
+  } catch (error) {
+    console.error('Error answering callback query:', error);
   }
 
+  if (!user) {
+    await ctx.reply('User not found! Please start with /start');
+    return;
+  }
+
+  // Handle different callback actions
   if (action === 'edit_name') {
     user.step = 'edit_name';
     await user.save();
-    setUserTimeout(botInstance, chatId, lang);
-    botInstance.sendMessage(chatId, langText[lang].askNewName);
-    return botInstance.answerCallbackQuery(callbackQuery.id);
+    setUserTimeout(ctx.telegram, chatId, lang);
+    await ctx.reply(langText[lang].askNewName);
+    
   } else if (action === 'edit_email') {
     user.step = 'edit_email';
     await user.save();
-    setUserTimeout(botInstance, chatId, lang);
-    botInstance.sendMessage(chatId, langText[lang].askNewEmail);
-    return botInstance.answerCallbackQuery(callbackQuery.id);
+    setUserTimeout(ctx.telegram, chatId, lang);
+    await ctx.reply(langText[lang].askNewEmail);
+    
   } else if (action === 'edit_phone') {
     user.step = 'edit_phone';
     await user.save();
-    setUserTimeout(botInstance, chatId, lang);
-    botInstance.sendMessage(chatId, langText[lang].askNewPhone);
-    return botInstance.answerCallbackQuery(callbackQuery.id);
+    setUserTimeout(ctx.telegram, chatId, lang);
+    await ctx.reply(langText[lang].askNewPhone);
+    
   } else if (action === 'edit_location') {
     user.step = 'edit_location';
     await user.save();
-    setUserTimeout(botInstance, chatId, lang);
-    botInstance.sendMessage(chatId, 'Please enter your new location:');
-    return botInstance.answerCallbackQuery(callbackQuery.id);
+    setUserTimeout(ctx.telegram, chatId, lang);
+    await ctx.reply('Please enter your new location:');
+    
   } else if (action === 'finish_payments') {
     // Check for user's own pending payment status
-    botInstance.answerCallbackQuery(callbackQuery.id);
-    if (user.name && !user.approved) { // User has registered but is not yet approved
+    if (user.name && !user.approved) {
       if (user.payment) {
         // Payment is uploaded, waiting for approval
-        return botInstance.sendMessage(chatId, langText[lang].waitForApproval);
+        await ctx.reply(langText[lang].waitForApproval);
       } else {
         // Payment is not uploaded, prompt to pay
-        user.step = 'payment'; // Set the user's step to payment
+        user.step = 'payment';
         await user.save();
-        setUserTimeout(botInstance, chatId, lang);
-        botInstance.sendMessage(chatId, langText[lang].accountNumber);
-        return botInstance.sendMessage(chatId, langText[lang].askPayment);
+        setUserTimeout(ctx.telegram, chatId, lang);
+        await ctx.reply(langText[lang].accountNumber);
+        await ctx.reply(langText[lang].askPayment);
       }
+      return;
     }
+    
     // Check for others' pending payments
     if (user.other_registrations && user.other_registrations.length > 0) {
       const pendingRegIndex = user.other_registrations.findIndex(reg => reg.phone && !reg.payment);
       if (pendingRegIndex !== -1) {
         const pendingReg = user.other_registrations[pendingRegIndex];
-        user.current_other_reg_index = pendingRegIndex; // Remember which registration we are paying for
-        user.step = 'payment_other'; // Set the step to handle the next photo upload
+        user.current_other_reg_index = pendingRegIndex;
+        user.step = 'payment_other';
         await user.save();
-        setUserTimeout(botInstance, chatId, lang);
-        return botInstance.sendMessage(chatId, `Please upload the payment screenshot for ${pendingReg.name}:`);
+        setUserTimeout(ctx.telegram, chatId, lang);
+        await ctx.reply(`Please upload the payment screenshot for ${pendingReg.name}:`);
+        return;
       }
     }
+    
     // If no pending payments are found
-    return botInstance.sendMessage(chatId, '✅ All payments are up to date!');
+    await ctx.reply('✅ All payments are up to date!');
+    
   } else if (action === 'continue_registration') {
     // Handle "Continue Registration" button click
     const step = user.step;
 
     if (!step) {
-      // Answer the query here and only here if there's no step.
-      return botInstance.answerCallbackQuery(callbackQuery.id, { text: 'You have no pending registration steps.', show_alert: true });
+      await ctx.reply('You have no pending registration steps.');
+      return;
     }
 
-    // The `user.step` from the database is the most reliable source of truth for where the user left off.
     const stepToDisplay = user.step;
     console.log(`Continue registration (callback): Displaying step '${stepToDisplay}'`);
-
-    // Now, we use `stepToDisplay` to show the user where they are,
-    // but we use the original `step` from the database to get the correct prompt.
-    // This ensures we ask for the correct piece of information.
-    botInstance.answerCallbackQuery(callbackQuery.id); // Acknowledge the click before proceeding.
-    await displayCurrentStep(botInstance, chatId, user, lang, stepToDisplay);
-    return; // The displayCurrentStep function handles sending the message.
+    
+    // Call displayCurrentStep WITHOUT parse_mode for edit_location step
+    if (stepToDisplay === 'edit_location') {
+      await ctx.reply('Please enter your new location:', {
+        reply_markup: {
+          inline_keyboard: [[
+            { text: 'Cancel', callback_data: 'cancel_edit' }
+          ]]
+        }
+      });
+    } else {
+      await displayCurrentStep(ctx.telegram, chatId, user, lang, stepToDisplay);
+    }
+    
   } else if (action.startsWith('remind_user:')) {
     // Handle the new reminder callback
     const parts = action.split(':');
@@ -133,66 +226,69 @@ async function handleCallbackQuery(botInstance, callbackQuery) {
     try {
       const targetUser = await User.findOne({ chatId: targetChatId });
       if (!targetUser) {
-        return botInstance.answerCallbackQuery(callbackQuery.id, { text: 'User not found!' });
+        await ctx.reply('User not found!');
+        return;
       }
 
-      const lang = targetUser.lang || 'en';
-      let reminderSent = false;
-
-      // Smart Reminder Logic
+      const targetLang = targetUser.lang || 'en';
       const step = targetUser.step;
+      
       if (!step) {
-        return botInstance.answerCallbackQuery(callbackQuery.id, { text: '⚠️ User is not in an active step.' });
+        await ctx.reply('⚠️ User is not in an active step.');
+        return;
       }
 
-      let reminderMsg = `🔔 *Reminder*\n\n`;
+      let reminderMsg = `🔔 Reminder\n\n`;
       let nextStepPrompt = '';
 
       switch (step) {
         case 'name':
-          nextStepPrompt = langText[lang].askName;
+          nextStepPrompt = langText[targetLang].askName;
           break;
         case 'email':
-          nextStepPrompt = langText[lang].askEmail;
+          nextStepPrompt = langText[targetLang].askEmail;
           break;
         case 'location':
-          nextStepPrompt = langText[lang].askLocation;
+          nextStepPrompt = langText[targetLang].askLocation;
           break;
         case 'phone':
-          nextStepPrompt = langText[lang].askPhone;
+          nextStepPrompt = langText[targetLang].askPhone;
           break;
         case 'payment':
-          nextStepPrompt = langText[lang].finishPaymentPrompt;
+          nextStepPrompt = langText[targetLang].finishPaymentPrompt;
           break;
         case 'name_other':
-          nextStepPrompt = langText[lang].askName_other;
+          nextStepPrompt = langText[targetLang].askName_other;
           break;
         case 'email_other':
-          nextStepPrompt = langText[lang].askEmail_other;
+          nextStepPrompt = langText[targetLang].askEmail_other;
           break;
         case 'location_other':
-          nextStepPrompt = langText[lang].askLocation_other;
+          nextStepPrompt = langText[targetLang].askLocation_other;
           break;
         case 'phone_other':
-          nextStepPrompt = langText[lang].askPhone_other;
+          nextStepPrompt = langText[targetLang].askPhone_other;
           break;
         case 'payment_other':
           const reg = targetUser.other_registrations[targetUser.current_other_reg_index ?? targetUser.other_registrations.length - 1];
-          nextStepPrompt = `You still need to upload the payment screenshot for *${reg.name}*.`;
+          nextStepPrompt = `You still need to upload the payment screenshot for ${reg.name}.`;
           break;
         default:
-          return botInstance.answerCallbackQuery(callbackQuery.id, { text: 'Unknown step.' });
+          await ctx.reply('Unknown step.');
+          return;
       }
 
-      await botInstance.sendMessage(targetChatId, reminderMsg + nextStepPrompt, { parse_mode: 'Markdown' });
-      targetUser.last_reminder_sent_at = new Date(); // Track reminder
+      // Send without parse_mode for safety
+      await ctx.telegram.sendMessage(targetChatId, reminderMsg + nextStepPrompt);
+      targetUser.last_reminder_sent_at = new Date();
       await targetUser.save();
-      botInstance.answerCallbackQuery(callbackQuery.id, { text: '✅ Smart reminder sent!' });
+      await ctx.reply('✅ Smart reminder sent!');
 
     } catch (error) {
       console.error('Error sending reminder:', error);
-      botInstance.answerCallbackQuery(callbackQuery.id, { text: '❌ Error sending reminder.' });
+      await ctx.reply('❌ Error sending reminder.');
     }
+    
   } else if (action.startsWith('remind_feeling:')) {
     // Handle feeling reminder callbacks
     const [, type, targetChatId] = action.split(':');
@@ -200,35 +296,49 @@ async function handleCallbackQuery(botInstance, callbackQuery) {
     try {
       const targetUser = await User.findOne({ chatId: targetChatId });
       if (!targetUser) {
-        return botInstance.answerCallbackQuery(callbackQuery.id, { text: 'User not found!' });
+        await ctx.reply('User not found!');
+        return;
       }
 
-      const lang = targetUser.lang || 'en';
+      const targetLang = targetUser.lang || 'en';
       if (type === 'before') {
         targetUser.step = 'feeling_before';
         await targetUser.save();
-        await botInstance.sendMessage(targetChatId, langText[lang].remindPreRetreatFeeling, { parse_mode: 'Markdown' });
+        await ctx.telegram.sendMessage(targetChatId, langText[targetLang].remindPreRetreatFeeling);
       } else if (type === 'after') {
         targetUser.step = 'feeling_after';
         await targetUser.save();
-        await botInstance.sendMessage(targetChatId, langText[lang].remindPostRetreatFeeling, { parse_mode: 'Markdown' });
+        await ctx.telegram.sendMessage(targetChatId, langText[targetLang].remindPostRetreatFeeling);
       }
-      botInstance.answerCallbackQuery(callbackQuery.id, { text: `✅ ${type} feeling reminder sent!` });
+      
+      await ctx.reply(`✅ ${type} feeling reminder sent!`);
+      
     } catch (error) {
-      // Improved error handling
-      if (error.code === 'ETELEGRAM' && error.response && error.response.statusCode === 403) {
+      if (error.response && error.response.error_code === 403) {
         console.log(`Could not send feeling reminder to ${targetChatId}: Bot was blocked by the user.`);
-        botInstance.answerCallbackQuery(callbackQuery.id, { text: 'User has blocked the bot.' });
+        await ctx.reply('User has blocked the bot.');
       } else {
         console.error('Error sending feeling reminder:', error);
-        botInstance.answerCallbackQuery(callbackQuery.id, { text: '❌ Error sending reminder.' });
+        await ctx.reply('❌ Error sending reminder.');
       }
     }
+    
+  } else if (action === 'cancel_edit') {
+    // Handle cancel edit callback
+    if (user) {
+      user.step = null;
+      await user.save();
+      await ctx.reply('Edit cancelled. Returning to main menu.');
+      await ctx.reply(
+        langText[lang].welcome || 'Welcome!',
+        generateMainMenuKeyboard(lang, user)
+      );
+    }
+    
   } else {
-    // If no other action was matched, answer the query to prevent a timeout
-    botInstance.answerCallbackQuery(callbackQuery.id);
+    // Default response for unhandled callbacks - send WITHOUT parse_mode
+    await ctx.reply('Action processed.');
   }
-
 }
 
 module.exports = {

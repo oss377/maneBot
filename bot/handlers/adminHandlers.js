@@ -4,6 +4,8 @@ const { generateMainMenuKeyboard } = require('../utils/keyboards');
 const { clearUserTimeout } = require('../utils/helpers');
 const { GROUP_LINK } = require('../../config/constants');
 const crypto = require('crypto');
+const fs = require('fs');
+const { Readable } = require('stream');
 
 async function approveUser(botInstance, userId, adminChatId) {
   try {
@@ -146,10 +148,12 @@ async function handleDeleteUser(botInstance, userIdToDelete, adminChatId) {
   }
 }
 
-async function handleExportUsers(botInstance, adminChatId) {
-  botInstance.sendMessage(adminChatId, '🔄 Generating user export... Please wait.');
 
+
+async function handleExportUsers(botInstance, adminChatId) {
   try {
+    await botInstance.sendMessage(adminChatId, '🔄 Generating user export... Please wait.');
+
     // Find all users who have at least started registration
     const allUsers = await User.find({ name: { $ne: null } });
 
@@ -196,22 +200,42 @@ async function handleExportUsers(botInstance, adminChatId) {
     });
 
     const csvContent = [csvHeaders.join(','), ...userRows].join('\n');
-    const fileBuffer = Buffer.from(csvContent, 'utf8');
-
-            botInstance.sendDocument(adminChatId, fileBuffer, {}, {
-      filename: `user_export_${new Date().toISOString().split('T')[0]}.csv`,
-      contentType: 'text/csv'
+    
+    // Create a temporary file
+    const fileName = `user_export_${Date.now()}.csv`;
+    fs.writeFileSync(fileName, csvContent, 'utf8');
+    
+    // Read the file and send it as a document
+    const fileContent = fs.readFileSync(fileName);
+    
+    // Send as document using proper method signature for Telegraf
+    await botInstance.sendDocument(adminChatId, {
+      source: fileContent,
+      filename: fileName
+    }, {
+      caption: `📊 Exported ${allUsers.length} users`
     });
+    
+    // Clean up the temporary file
+    fs.unlinkSync(fileName);
+    
   } catch (error) {
     console.error('Failed to export users:', error);
-            botInstance.sendMessage(adminChatId, '❌ An error occurred while generating the user export.');
-          }
+    
+    // Send error message without crashing
+    if (error.response && error.response.description && error.response.description.includes('wrong remote file identifier')) {
+      console.error('File sending error - incorrect file format');
+      await botInstance.sendMessage(adminChatId, '❌ Failed to send CSV file. File format error. Please try again.');
+    } else {
+      await botInstance.sendMessage(adminChatId, '❌ An error occurred while generating the user export: ' + error.message);
+    }
+  }
 }
 
 async function handlePendingPayments(botInstance, adminChatId) {
-  botInstance.sendMessage(adminChatId, '🔍 Searching for pending payments...');
-
   try {
+    await botInstance.sendMessage(adminChatId, '🔍 Searching for pending payments...');
+
     // Find users with pending payments (for themselves or for others)
     const usersWithPending = await User.find({
       $or: [
@@ -232,11 +256,13 @@ async function handlePendingPayments(botInstance, adminChatId) {
       }
 
       // Check payments for others registered by this user
-      user.other_registrations.forEach((reg, index) => {
-        if (reg.payment && !reg.approved) {
-          pendingList.push(`*For:* ${reg.name} (Registered by ${user.name})\n  - To approve, send: \`/approve_other ${user.chatId} ${index}\``);
-        }
-      });
+      if (user.other_registrations) {
+        user.other_registrations.forEach((reg, index) => {
+          if (reg.payment && !reg.approved) {
+            pendingList.push(`*For:* ${reg.name} (Registered by ${user.name})\n  - To approve, send: \`/approve_other ${user.chatId} ${index}\``);
+          }
+        });
+      }
     });
 
     const message = `*⏳ Pending Payment Approvals*\n\n${pendingList.join('\n\n')}`;
@@ -248,9 +274,9 @@ async function handlePendingPayments(botInstance, adminChatId) {
 }
 
 async function handleStats(botInstance, adminChatId) {
-  botInstance.sendMessage(adminChatId, '📊 Calculating statistics... Please wait.');
-
   try {
+    await botInstance.sendMessage(adminChatId, '📊 Calculating statistics... Please wait.');
+
     const allUsers = await User.find({});
 
     let totalRegistrations = 0;
@@ -268,6 +294,7 @@ async function handleStats(botInstance, adminChatId) {
         { 'other_registrations.last_reminder_sent_at': { $gte: startOfToday } }
       ]
     });
+    
     allUsers.forEach(user => {
       // Count language for primary users
       if (user.lang) languageCount[user.lang]++;
@@ -310,9 +337,9 @@ async function handleStats(botInstance, adminChatId) {
 }
 
 async function handleIncomplete(botInstance, adminChatId) {
-  botInstance.sendMessage(adminChatId, '🔍 Searching for incomplete registrations (payment not uploaded)...');
-
   try {
+    await botInstance.sendMessage(adminChatId, '🔍 Searching for incomplete registrations (payment not uploaded)...');
+
     // Find any user who is currently in a registration step
     const usersWithIncomplete = await User.find({ step: { $ne: null } });
 
@@ -323,20 +350,19 @@ async function handleIncomplete(botInstance, adminChatId) {
     const keyboardButtons = [];
     usersWithIncomplete.forEach(user => {
       let userName = user.name || `User ID: ${user.chatId}`;
-      let stepInfo = user.step.replace('_other', ' (for other)');
+      let stepInfo = user.step ? user.step.replace('_other', ' (for other)') : 'unknown';
 
       // If registering for someone else, identify who
-      if (user.step.endsWith('_other')) {
-        const regIndex = user.current_other_reg_index ?? user.other_registrations.length - 1;
-        const reg = user.other_registrations[regIndex];
-        if (reg && reg.name) {
-          userName = `${user.name} (for ${reg.name})`;
+      if (user.step && user.step.endsWith('_other')) {
+        const regIndex = user.current_other_reg_index ?? (user.other_registrations ? user.other_registrations.length - 1 : -1);
+        if (user.other_registrations && user.other_registrations[regIndex] && user.other_registrations[regIndex].name) {
+          userName = `${user.name} (for ${user.other_registrations[regIndex].name})`;
         }
       }
 
       keyboardButtons.push([{
         text: `👤 ${userName} | Stuck on: ${stepInfo}`,
-        callback_data: `remind_user:${user.chatId}:-1` // Index is no longer needed here
+        callback_data: `remind_user:${user.chatId}:-1`
       }]);
     });
 
@@ -352,9 +378,9 @@ async function handleIncomplete(botInstance, adminChatId) {
 }
 
 async function handleFeelings(botInstance, adminChatId) {
-  botInstance.sendMessage(adminChatId, '📝 Generating summary of user feelings...');
-
   try {
+    await botInstance.sendMessage(adminChatId, '📝 Generating summary of user feelings...');
+
     const usersWithFeelings = await User.find({
       $or: [
         { feeling_before: { $ne: null, $ne: '' } },
@@ -393,9 +419,9 @@ async function handleFeelings(botInstance, adminChatId) {
 }
 
 async function handleRemindFeelings(botInstance, adminChatId) {
-  botInstance.sendMessage(adminChatId, '🔍 Finding users who need a feeling reminder...');
-
   try {
+    await botInstance.sendMessage(adminChatId, '🔍 Finding users who need a feeling reminder...');
+
     // Find approved users who are missing at least one feeling
     const usersToRemind = await User.find({
       approved: true,
@@ -432,26 +458,31 @@ async function handleRemindFeelings(botInstance, adminChatId) {
 }
 
 async function handleBroadcastMessage(botInstance, messageToSend, adminChatId) {
-  // Find all users who have completed at least the name step
-  const allUsers = await User.find({ name: { $ne: null } });
-  if (allUsers.length === 0) {
-    return botInstance.sendMessage(adminChatId, 'No registered users found to broadcast to.');
-  }
-
-  botInstance.sendMessage(adminChatId, `🚀 Starting broadcast to ${allUsers.length} users...`);
-  let successCount = 0;
-  let errorCount = 0;
-
-  for (const target of allUsers) {
-    try {
-      await botInstance.sendMessage(target.chatId, messageToSend);
-      successCount++;
-    } catch (error) {
-      console.error(`Failed to send message to user ${target.chatId}:`, error.message);
-      errorCount++;
+  try {
+    // Find all users who have completed at least the name step
+    const allUsers = await User.find({ name: { $ne: null } });
+    if (allUsers.length === 0) {
+      return botInstance.sendMessage(adminChatId, 'No registered users found to broadcast to.');
     }
+
+    await botInstance.sendMessage(adminChatId, `🚀 Starting broadcast to ${allUsers.length} users...`);
+    let successCount = 0;
+    let errorCount = 0;
+
+    for (const target of allUsers) {
+      try {
+        await botInstance.sendMessage(target.chatId, messageToSend);
+        successCount++;
+      } catch (error) {
+        console.error(`Failed to send message to user ${target.chatId}:`, error.message);
+        errorCount++;
+      }
+    }
+    return botInstance.sendMessage(adminChatId, `Broadcast finished.\n\n✅ Successfully sent to: ${successCount} users.\n❌ Failed to send to: ${errorCount} users.`);
+  } catch (error) {
+    console.error('Error in broadcast:', error);
+    return botInstance.sendMessage(adminChatId, '❌ Error during broadcast: ' + error.message);
   }
-  return botInstance.sendMessage(adminChatId, `Broadcast finished.\n\n✅ Successfully sent to: ${successCount} users.\n❌ Failed to send to: ${errorCount} users.`);
 }
 
 module.exports = {
