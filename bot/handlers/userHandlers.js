@@ -607,7 +607,7 @@ async function handleTextMessage(ctx, text, chatId, user, lang) {
     const phonePromptOptions = {
       reply_markup: {
         remove_keyboard: true,
-        input_field_placeholder: '0911223344'
+        input_field_placeholder: '0987209020'
       }
     };
     setUserTimeout(ctx.telegram, chatId, lang);
