@@ -1,6 +1,6 @@
 module.exports = {
   en: {
-    welcome: `*Welcome!* ✨  This bot helps you register and join our exclusive group. Please select an option from the menu below to begin.`,
+    welcome: `*Welcome!* ✨  This bot helps you register and join our exclusive retreat group. Please select an option from the menu below to begin.`,
     help: `*Welcome to the Help Center!* *User Commands:* ➡️ */start*: Restarts the bot and allows you to re-select your language. ➡️ *Register / መዝግብ*: Begin the registration process to join our group. ➡️ *Join Group / ቡድኑን ይቀላቀሉ*: Access the group link after your registration is approved. ➡️ *Help / እገዛ*: Shows this help message. ➡️ *Contact Us*: Displays our contact information.`,
     help_intro: `*Welcome to the Help Center!* 📚\n\nSelect a category below to see the available commands.`,
     help_user_commands: `*User Commands* 👤\n\n➡️ *Register / መዝግብ*: Begin the registration process to join our group.\n➡️ *Join Group / ቡድኑን ይቀላቀሉ*: Access the group link after your registration is approved.\n➡️ *My Profile / የእኔ መገለጫ*: View and manage your registration details.\n➡️ *Contact Us*: Displays our contact information.\n➡️ *Change Language*: Change your preferred language.`,
@@ -34,7 +34,7 @@ module.exports = {
     askNewEmail: 'Please enter your new email address:',
     askNewPhone: 'Please enter your new phone number:',
     updateSuccess: '✅ Your profile has been updated successfully!',
-    invalidName: 'Invalid name. Please enter your full name including your father\'s name (e.g., John Doe).',
+    invalidName: 'Invalid name. Please enter your full name including your father\'s name (e.g., tedy afro).',
     invalidEmail: 'Invalid email. Please enter a valid email address (e.g., user@example.com).',
     invalidPhone: 'Invalid phone number. Please enter a 10-digit number starting with 09 (e.g., 0987209020).',
     otherProfileTitle: '👤 *Registered Friend\'s Profile*',
@@ -67,7 +67,7 @@ module.exports = {
     contactUsButton: '📞 Contact Us',
     changeLanguageButton: '🌐 Change Language',
     selectLanguagePrompt: 'Please select your new language:',
-    contactUs: `*Get in Touch!*\n\nYou can reach us through any of the following channels:\n\n*Phone:* \`+251911223344\`\n*Email:* contact@example.com\n*Telegram Channel:* @YourChannelLink\n*Facebook:* Our Facebook Page`,
+    contactUs: `*Get in Touch!*\n\nYou can reach us through any of the following channels:\n\n*Phone:* \`+251987209020\`\n*Email:* contact@example.com\n*Telegram Channel:* @YourChannelLink\n*Facebook:* Our Facebook Page`,
     continueRegistrationPrompt: '👋 Welcome back! It looks like you didn\'t finish your registration. Click the button below to continue where you left off.',
     continueRegistrationButton: '➡️ Continue Registration',
     welcomeBackFinishPayment: 'Welcome back! It looks like you\'ve completed your registration details. Please upload your payment to finalize.',
@@ -85,7 +85,7 @@ module.exports = {
     registrationSteps: `*How to Register* 📝  Here are the simple steps to complete your registration:  1️⃣ *Enter Your Details*: We'll ask for your full name, email, location, and phone number. 2️⃣ *Submit Payment*: You'll be asked to upload a screenshot of your payment. 3️⃣ *Admin Approval*: Our admin will review your payment. 4️⃣ *Join the Group*: Once approved, you can join the exclusive group!  Click the "Register / መዝግብ" button below to start.`
   },
   am: {
-    welcome: `*እንኳን ደህና መጡ!* ✨  ይህ ቦት ለልዩ ቡድናችን እንዲመዘገቡ እና እንዲቀላቀሉ ይረዳዎታል። ለመጀመር እባክዎ ከታች ካለው ምናሌ ውስጥ አንድ አማራጭ ይምረጡ።`,
+    welcome: `*እንኳን ደህና መጡ!* ✨  ይህ ቦት ለልዩ የሪትሪት ቡድናችን እንዲመዘገቡ እና እንዲቀላቀሉ ይረዳዎታል። ለመጀመር እባክዎ ከታች ካለው ምናሌ ውስጥ አንድ አማራጭ ይምረጡ።`,
     help: `*እንኳን ወደ የእገዛ ማዕከል በደህና መጡ!* *የተጠቃሚ ትዕዛዞች:* ➡️ */start*: ቦቱን እንደገና ያስጀምረዋል እና ቋንቋዎን እንደገና እንዲመርጡ ያስችልዎታል። ➡️ *Register / መዝግብ*: ቡድናችንን ለመቀላቀል የምዝገባ ሂደቱን ይጀምሩ። ➡️ *Join Group / ቡድኑን ይቀላቀሉ*: ምዝገባዎ ከጸደቀ በኋላ የቡድኑን ሊንክ ያግኙ። ➡️ *Help / እገዛ*: ይህን የእገዛ መልእክት ያሳያል። ➡️ *Contact Us*: የእኛን አድራሻ መረጃ ያሳያል።`,
     help_intro: `*እንኳን ወደ የእገዛ ማዕከል በደህና መጡ!* 📚\n\nያሉትን ትዕዛዞች ለማየት ከታች አንድ ምድብ ይምረጡ።`,
     help_user_commands: `*የተጠቃሚ ትዕዛዞች* 👤\n\n➡️ *Register / መዝግብ*: ቡድናችንን ለመቀላቀል የምዝገባ ሂደቱን ይጀምሩ።\n➡️ *Join Group / ቡድኑን ይቀላቀሉ*: ምዝገባዎ ከጸደቀ በኋላ የቡድኑን ሊንክ ያግኙ።\n➡️ *My Profile / የእኔ መገለጫ*: የምዝገባ ዝርዝሮችዎን ይመልከቱ እና ያስተዳድሩ።\n➡️ *Contact Us*: የእኛን አድራሻ መረጃ ያሳያል።\n➡️ *Change Language*: የመረጡትን ቋንቋ ይቀይሩ።`,
@@ -152,7 +152,7 @@ module.exports = {
     contactUsButton: '📞 ያግኙን',
     changeLanguageButton: '🌐 ቋንቋ ቀይር',
     selectLanguagePrompt: 'እባክዎ አዲሱን ቋንቋዎን ይምረጡ፡',
-    contactUs: `*ሊያገኙን የሚችሉበት መንገድ!*\n\nበሚከተሉት መንገዶች ሊያገኙን ይችላሉ:\n\n*ስልክ:* \`+251911223344\`\n*ኢሜል:* contact@example.com\n*ቴሌግራም ቻናል:* @YourChannelLink\n*ፌስቡክ:* የፌስቡክ ገጻችን`,
+    contactUs: `*ሊያገኙን የሚችሉበት መንገድ!*\n\nበሚከተሉት መንገዶች ሊያገኙን ይችላሉ:\n\n*ስልክ:* \`+251987209020\`\n*ኢሜል:* contact@example.com\n*ቴሌግራም ቻናል:* @YourChannelLink\n*ፌስቡክ:* የፌስቡክ ገጻችን`,
     continueRegistrationPrompt: '👋 እንኳን ደህና መጡ! ምዝገባዎን ያላጠናቀቁ ይመስላል። ካቆሙበት ለመቀጠል ከታች ያለውን ቁልፍ ይጫኑ።',
     continueRegistrationButton: '➡️ ምዝገባ ይቀጥሉ',
     welcomeBackFinishPayment: 'እንኳን ደህና መጡ! የምዝገባ ዝርዝሮችዎን ያጠናቀቁ ይመስላል። እባክዎ ምዝገባዎን ለማጠናቀቅ ክፍያዎን ይጫኑ።',
@@ -237,7 +237,7 @@ module.exports = {
     contactUsButton: '📞 Nu Qunnamaa',
     changeLanguageButton: '🌐 Afaan Jijjiiri',
     selectLanguagePrompt: 'Mee afaan keessan haaraa filadhaa:',
-    contactUs: `*Akkaataa Ittiin Nu Qunnamtan!*\n\nKaraalee armaan gadiitiin nu qunnamuu dandeessu:\n\n*Bilbila:* \`+251911223344\`\n*Email:* contact@example.com\n*Chaanaalii Telegramii:* @YourChannelLink\n*Facebook:* Fuula Facebook Keenyaa`,
+    contactUs: `*Akkaataa Ittiin Nu Qunnamtan!*\n\nKaraalee armaan gadiitiin nu qunnamuu dandeessu:\n\n*Bilbila:* \`+251987209020\`\n*Email:* contact@example.com\n*Chaanaalii Telegramii:* @YourChannelLink\n*Facebook:* Fuula Facebook Keenyaa`,
     continueRegistrationPrompt: '👋 Baga nagaan deebitan! Akkaataa galmee keessanii hin xumurre fakkaata. Bakka dhaabdan irraa itti fufuuf, mee mallattoo armaan gadii tuqaa.',
     continueRegistrationButton: '➡️ Galmee Itti Fufi',
     welcomeBackFinishPayment: 'Baga nagaan deebitan! Odeeffannoo galmee keessanii xumurtaniirtu fakkaata. Mee kaffaltii keessan olkaa.',
