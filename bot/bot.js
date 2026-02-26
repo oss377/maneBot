@@ -1,8 +1,11 @@
+require('dotenv').config();
 const { Telegraf, session } = require('telegraf');
 const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
-const { token, PORT, SECRET_TOKEN } = require('../config/constants');
+const { 
+  token, PORT, SECRET_TOKEN, CHOREO_PUBLIC_URL 
+} = require('../config/constants');
 const { connectDB } = require('../db');
 const User = require('../models/User');
 const { handleStart, handleMessage } = require('./handlers/userHandlers');
@@ -14,13 +17,13 @@ const {
 } = require('./handlers/adminHandlers');
 const langText = require('../languages/translations');
 
-// Check token
+// --- Check BOT token ---
 if (!token) {
-  console.error('BOT_TOKEN not found in .env');
+  console.error('❌ BOT_TOKEN not found in .env');
   process.exit(1);
 }
 
-// Express setup
+// --- Express setup ---
 const app = express();
 app.use(bodyParser.json());
 
@@ -28,15 +31,15 @@ app.use(bodyParser.json());
 const isProduction = process.env.NODE_ENV === 'production';
 const usePolling = process.env.USE_POLLING === 'true' || !isProduction;
 
-// Initialize Telegraf
-console.log(`🚀 Starting in ${usePolling ? 'POLLING' : 'WEBHOOK'} mode`);
+// --- Initialize Telegraf ---
+console.log(`🚀 Starting bot in ${usePolling ? 'POLLING' : 'WEBHOOK'} mode`);
 const bot = new Telegraf(token);
 bot.use(session());
 
 // --- Express webhook route for Choreo ---
 app.post('/webhook', (req, res) => {
   if (usePolling) {
-    console.log('⚠️  Received webhook request but running in polling mode');
+    console.log('⚠️ Received webhook request but bot is in polling mode');
     return res.sendStatus(200);
   }
 
@@ -47,7 +50,7 @@ app.post('/webhook', (req, res) => {
   res.sendStatus(200);
 });
 
-// Health check
+// --- Health check ---
 app.get('/health', (req, res) => {
   res.json({
     status: 'ok',
@@ -72,24 +75,29 @@ ${langText[lang].adminCommands || ''}`;
   ctx.reply(helpText);
 });
 
-// Error handling
+// --- Error handling ---
 bot.catch((err, ctx) => {
   console.error(`❌ Error for ${ctx.updateType}:`, err);
   ctx.reply('❌ An error occurred. Please try again later.');
+});
+
+app.use((err, req, res, next) => {
+  console.error('❌ Express error:', err);
+  res.status(500).send('Internal Server Error');
 });
 
 process.on('unhandledRejection', (reason) => console.error('❌ Unhandled Rejection:', reason));
 process.on('SIGINT', () => bot.stop('SIGINT'));
 process.on('SIGTERM', () => bot.stop('SIGTERM'));
 
-// --- Set Telegram Webhook for Choreo ---
+// --- Set Telegram Webhook ---
 async function setTelegramWebhook() {
   if (usePolling) {
-    console.log('🤖 Skipping webhook setup (polling mode active)');
+    console.log('🤖 Polling mode active, skipping webhook setup');
     return;
   }
 
-  const webhookUrl = 'https://0bd06e96-e7ba-4c5b-a764-ed0606da648d-dev.e1-us-east-azure.choreoapis.dev/newbot/newbot/v1.0/webhook';
+  const webhookUrl = `${CHOREO_PUBLIC_URL}/newbot/newbot/v1.0/webhook`;
   console.log(`🌐 Setting webhook to ${webhookUrl}`);
 
   try {
@@ -100,13 +108,7 @@ async function setTelegramWebhook() {
     console.log('✅ Webhook set successfully');
 
     const info = await bot.telegram.getWebhookInfo();
-    console.log('📊 Webhook info:', {
-      url: info.url,
-      has_custom_certificate: info.has_custom_certificate,
-      pending_update_count: info.pending_update_count,
-      last_error_date: info.last_error_date,
-      last_error_message: info.last_error_message
-    });
+    console.log('🔎 Webhook info:', info);
   } catch (error) {
     console.error('❌ Failed to set webhook:', error.message);
   }
@@ -129,6 +131,7 @@ const checkPendingPayments = async () => {
     for (const user of usersToRemind) {
       const lang = user.lang || 'en';
 
+      // Self pending payment
       if (user.payment === null && !user.approved && user.payment_pending_since && user.payment_pending_since < twentyFourHoursAgo) {
         try {
           await bot.telegram.sendMessage(user.chatId, `🔔 *Reminder*\n\n${langText[lang].finishPaymentPrompt}`, { parse_mode: 'Markdown' });
@@ -140,6 +143,7 @@ const checkPendingPayments = async () => {
         }
       }
 
+      // Other registrations
       let changesMade = false;
       for (const reg of user.other_registrations) {
         if (reg.payment === null && !reg.approved && reg.payment_pending_since && reg.payment_pending_since < twentyFourHoursAgo) {
@@ -175,7 +179,6 @@ async function startServer() {
         await bot.launch();
         console.log('🤖 Bot is actively polling for updates...');
       } else {
-        console.log(`🔗 Webhook endpoint: https://0bd06e96-e7ba-4c5b-a764-ed0606da648d-dev.e1-us-east-azure.choreoapis.dev/newbot/newbot/v1.0/webhook`);
         await setTelegramWebhook();
       }
     });
