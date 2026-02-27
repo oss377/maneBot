@@ -3,9 +3,24 @@ const { Telegraf, session } = require('telegraf');
 const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
+
+// Import constants - make sure MONGO_URI is exported from constants
+const constants = require('../config/constants');
 const { 
-  token, PORT, SECRET_TOKEN, CHOREO_PUBLIC_URL 
-} = require('../config/constants');
+  token, PORT, SECRET_TOKEN, CHOREO_PUBLIC_URL, MONGO_URI 
+} = constants;
+
+// Debug logging for environment variables
+console.log('========== CHOREO DEBUG INFO ==========');
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('BOT_TOKEN exists:', !!token);
+console.log('MONGO_URI exists:', !!MONGO_URI);
+console.log('PORT:', PORT);
+console.log('SECRET_TOKEN exists:', !!SECRET_TOKEN);
+console.log('CHOREO_PUBLIC_URL exists:', !!CHOREO_PUBLIC_URL);
+console.log('USE_POLLING:', process.env.USE_POLLING);
+console.log('=======================================');
+
 const { connectDB } = require('../db');
 const User = require('../models/User');
 const { handleStart, handleMessage } = require('./handlers/userHandlers');
@@ -17,10 +32,11 @@ const {
 } = require('./handlers/adminHandlers');
 const langText = require('../languages/translations');
 
-// --- Check BOT token ---
+// --- Check BOT token (don't exit, just log error) ---
 if (!token) {
-  console.error('❌ BOT_TOKEN not found in .env');
-  process.exit(1);
+  console.error('❌ BOT_TOKEN not found in environment variables');
+  console.error('Please add BOT_TOKEN in Choreo Console → Configuration');
+  // Don't exit - let the app try to recover
 }
 
 // --- Express setup ---
@@ -31,13 +47,23 @@ app.use(bodyParser.json());
 const isProduction = process.env.NODE_ENV === 'production';
 const usePolling = process.env.USE_POLLING === 'true' || !isProduction;
 
-// --- Initialize Telegraf ---
-console.log(`🚀 Starting bot in ${usePolling ? 'POLLING' : 'WEBHOOK'} mode`);
-const bot = new Telegraf(token);
-bot.use(session());
+// --- Initialize Telegraf (only if token exists) ---
+let bot = null;
+if (token) {
+  console.log(`🚀 Starting bot in ${usePolling ? 'POLLING' : 'WEBHOOK'} mode`);
+  bot = new Telegraf(token);
+  bot.use(session());
+} else {
+  console.error('⚠️ Bot not initialized - BOT_TOKEN missing');
+}
 
 // --- Express webhook route for Choreo ---
 app.post('/webhook', (req, res) => {
+  if (!bot) {
+    console.log('⚠️ Webhook received but bot not initialized');
+    return res.sendStatus(200);
+  }
+  
   if (usePolling) {
     console.log('⚠️ Received webhook request but bot is in polling mode');
     return res.sendStatus(200);
@@ -50,54 +76,82 @@ app.post('/webhook', (req, res) => {
   res.sendStatus(200);
 });
 
-// --- Health check ---
+// --- Health check endpoints (required for Choreo) ---
 app.get('/health', (req, res) => {
   res.json({
     status: 'ok',
     mode: usePolling ? 'polling' : 'webhook',
+    mongoConnected: mongoose.connection.readyState === 1,
+    botInitialized: !!bot,
     timestamp: new Date().toISOString()
   });
 });
 
-// --- Telegraf Handlers ---
-bot.start(async (ctx) => await handleStart(ctx));
-bot.on('message', async (ctx) => await handleMessage(ctx));
-bot.on('callback_query', async (ctx) => await handleCallbackQuery(ctx));
+app.get('/healthz', (req, res) => {
+  res.status(200).send('OK');
+});
 
-bot.command('help', async (ctx) => {
-  const lang = ctx.session?.lang || 'en';
-  const helpText = `
+app.get('/ready', (req, res) => {
+  // Check if MongoDB is connected
+  if (mongoose.connection.readyState === 1) {
+    res.status(200).send('Ready');
+  } else {
+    res.status(503).send('MongoDB not connected');
+  }
+});
+
+// --- Telegraf Handlers (only if bot exists) ---
+if (bot) {
+  bot.start(async (ctx) => await handleStart(ctx));
+  bot.on('message', async (ctx) => await handleMessage(ctx));
+  bot.on('callback_query', async (ctx) => await handleCallbackQuery(ctx));
+
+  bot.command('help', async (ctx) => {
+    const lang = ctx.session?.lang || 'en';
+    const helpText = `
 ${langText[lang].helpTitle || 'Help Center'}
 
 ${langText[lang].helpText || 'Available commands:\n/start - Start the bot\n/help - Show this help message'}
 
 ${langText[lang].adminCommands || ''}`;
-  ctx.reply(helpText);
-});
+    ctx.reply(helpText);
+  });
 
-// --- Error handling ---
-bot.catch((err, ctx) => {
-  console.error(`❌ Error for ${ctx.updateType}:`, err);
-  ctx.reply('❌ An error occurred. Please try again later.');
-});
+  // --- Error handling for bot ---
+  bot.catch((err, ctx) => {
+    console.error(`❌ Error for ${ctx.updateType}:`, err);
+    ctx.reply('❌ An error occurred. Please try again later.');
+  });
+}
 
+// --- Express error handling ---
 app.use((err, req, res, next) => {
   console.error('❌ Express error:', err);
   res.status(500).send('Internal Server Error');
 });
 
-process.on('unhandledRejection', (reason) => console.error('❌ Unhandled Rejection:', reason));
-process.on('SIGINT', () => bot.stop('SIGINT'));
-process.on('SIGTERM', () => bot.stop('SIGTERM'));
+// --- Process error handlers ---
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('❌ Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
+process.on('uncaughtException', (error) => {
+  console.error('❌ Uncaught Exception:', error);
+});
 
 // --- Set Telegram Webhook ---
 async function setTelegramWebhook() {
+  if (!bot) {
+    console.log('🤖 Bot not initialized, skipping webhook setup');
+    return;
+  }
+  
   if (usePolling) {
     console.log('🤖 Polling mode active, skipping webhook setup');
     return;
   }
 
-  const webhookUrl = `${CHOREO_PUBLIC_URL}/newbot/newbot/v1.0/webhook`;
+  const webhookUrl = `${CHOREO_PUBLIC_URL}/webhook`; // Fixed path
   console.log(`🌐 Setting webhook to ${webhookUrl}`);
 
   try {
@@ -116,6 +170,12 @@ async function setTelegramWebhook() {
 
 // --- Scheduled Payment Reminder Job ---
 const checkPendingPayments = async () => {
+  // Only run if MongoDB is connected
+  if (mongoose.connection.readyState !== 1) {
+    console.log('⏰ MongoDB not connected, skipping payment reminder job');
+    return;
+  }
+  
   console.log('⏰ Running scheduled job: Checking for pending payments...');
   const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
 
@@ -128,6 +188,12 @@ const checkPendingPayments = async () => {
     });
 
     console.log(`🔍 Found ${usersToRemind.length} users to remind`);
+    
+    if (!bot) {
+      console.log('🤖 Bot not initialized, skipping reminders');
+      return;
+    }
+    
     for (const user of usersToRemind) {
       const lang = user.lang || 'en';
 
@@ -165,41 +231,113 @@ const checkPendingPayments = async () => {
   }
 };
 
+// --- MongoDB connection with retry logic ---
+const connectWithRetry = async (retryCount = 0) => {
+  try {
+    if (!MONGO_URI) {
+      console.error('❌ MONGO_URI is not defined in environment variables!');
+      console.log('Please add MONGO_URI in Choreo Console → Configuration');
+      
+      // Retry every 30 seconds to check if URI appears
+      setTimeout(() => connectWithRetry(retryCount + 1), 30000);
+      return false;
+    }
+
+    await connectDB(); // This should use MONGO_URI from constants
+    console.log('✅ MongoDB Connected Successfully');
+    return true;
+  } catch (error) {
+    console.error(`❌ MongoDB Connection Error (attempt ${retryCount + 1}):`, error.message);
+    
+    // Exponential backoff: 5s, 10s, 20s, 40s, etc. (max 5 minutes)
+    const delay = Math.min(5000 * Math.pow(2, retryCount), 300000);
+    console.log(`🔄 Retrying MongoDB connection in ${delay/1000} seconds...`);
+    
+    setTimeout(() => connectWithRetry(retryCount + 1), delay);
+    return false;
+  }
+};
+
 // --- Start Server ---
 async function startServer() {
   try {
-    await connectDB();
-    console.log('✅ MongoDB Connected Successfully');
+    // Start MongoDB connection in background (don't await)
+    connectWithRetry();
 
-    app.listen(PORT, async () => {
+    // Start the server immediately (even without MongoDB)
+    const server = app.listen(PORT, async () => {
       console.log(`🌐 Server running on port ${PORT}`);
       console.log(`📡 Mode: ${usePolling ? 'POLLING' : 'WEBHOOK'}`);
 
-      if (usePolling) {
-        await bot.launch();
-        console.log('🤖 Bot is actively polling for updates...');
+      // Start bot if token exists
+      if (bot) {
+        if (usePolling) {
+          try {
+            await bot.launch();
+            console.log('🤖 Bot is actively polling for updates...');
+          } catch (error) {
+            console.error('❌ Failed to launch bot in polling mode:', error.message);
+          }
+        } else {
+          await setTelegramWebhook();
+        }
       } else {
-        await setTelegramWebhook();
+        console.log('🤖 Bot not started - waiting for BOT_TOKEN');
       }
     });
 
+    // Set up scheduled jobs
     setInterval(checkPendingPayments, 3600000); // every hour
-    setTimeout(checkPendingPayments, 5000); // run once on startup
+    setTimeout(checkPendingPayments, 10000); // run once after 10 seconds
     console.log('✅ Payment reminder job scheduled to run every hour.');
+
+    // Handle server errors
+    server.on('error', (error) => {
+      console.error('❌ Server error:', error);
+    });
+
   } catch (error) {
     console.error('❌ Failed to start server:', error);
-    process.exit(1);
+    // Don't exit - let the process continue and retry
+    setTimeout(startServer, 10000);
   }
 }
 
 // --- Graceful shutdown ---
-const shutdown = async () => {
-  console.log('\n🛑 Shutting down gracefully...');
-  try { await bot.stop(); console.log('✅ Bot stopped gracefully'); } catch (err) { console.error(err.message); }
-  try { await mongoose.connection.close(); console.log('✅ MongoDB connection closed'); } catch (err) { console.error(err.message); }
-  process.exit(0);
+const shutdown = async (signal) => {
+  console.log(`\n🛑 Received ${signal}, shutting down gracefully...`);
+  
+  // Stop bot
+  if (bot) {
+    try { 
+      await bot.stop(); 
+      console.log('✅ Bot stopped gracefully'); 
+    } catch (err) { 
+      console.error('Error stopping bot:', err.message); 
+    }
+  }
+  
+  // Close MongoDB connection
+  try { 
+    await mongoose.connection.close(); 
+    console.log('✅ MongoDB connection closed'); 
+  } catch (err) { 
+    console.error('Error closing MongoDB:', err.message); 
+  }
+  
+  // Exit after everything is cleaned up
+  setTimeout(() => {
+    console.log('👋 Goodbye!');
+    process.exit(0);
+  }, 1000);
 };
-process.on('SIGINT', shutdown);
-process.on('SIGTERM', shutdown);
 
+// Handle shutdown signals
+process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+
+// Export for testing
 module.exports = { bot, app, startServer, PORT, setTelegramWebhook };
+
+// Start the server
+startServer();

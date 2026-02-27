@@ -8,9 +8,19 @@ module.exports = {
   GROUP_LINK: process.env.GROUP_LINK || 'https://t.me/your_group_link',
   CHOREO_PUBLIC_URL: process.env.CHOREO_PUBLIC_URL || 'https://newbot-dev.choreoapps.dev',
   NODE_ENV: process.env.NODE_ENV || 'production',
+  // ADD THIS - MongoDB URI
+  MONGO_URI: process.env.MONGO_URI || process.env.MONGODB_URI,
   PATTERNS: {
     NAME: /^[\p{L}\s]+$/u,
     PHONE: /^09\d{8}$/,
     EMAIL: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   }
 };
+
+// Add debug log (optional)
+console.log('📋 Constants loaded:', {
+  tokenExists: !!process.env.BOT_TOKEN,
+  mongoUriExists: !!(process.env.MONGO_URI || process.env.MONGODB_URI),
+  port: process.env.PORT || 8080,
+  nodeEnv: process.env.NODE_ENV || 'production'
+});
